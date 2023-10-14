@@ -8,6 +8,17 @@
 	gap: 8px;
 }
 
+.edit-section button {
+	background-color: var(--main-btn-clr);
+	border-radius: var(--border-radius);
+	padding: 12px;
+}
+
+.edit-section header {
+	display: flex;
+	justify-content: space-between;
+}
+
 .edit-panel {
 	width: 40%;
 	height: min-content;
@@ -16,16 +27,19 @@
 	gap: 24px;
 }
 
-.edit-sidebar button {
-	background-color: #f5f5f5;
-	border-radius: var(--border-radius);
-	padding: 12px;
+.sidebar-btn {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	font-size: 16px;
 	font-weight: 700;
 }
+
+.sidebar-btn.active-btn {
+	background-color: var(--clr-light-blue);
+	color: white;
+}
+
 .edit-section h2 {
 	margin-bottom: 4px;
 }

@@ -43,3 +43,8 @@ Components:
 -   Designs for inspiration:
     1. https://sharkri.github.io/cv-application/
     2. https://rmathr.github.io/cv-project/
+
+
+- Issues:
+2. Drop downs could be smoother.
+3. Resume actions should travel with the user

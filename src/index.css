@@ -18,15 +18,19 @@ video {
 	max-width: 100%;
 }
 
-.hidden {
-	display: none;
+.content-hidden {
+	height: 0;
 }
 
 :root {
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	--edit-section-clr: rgba(255, 255, 255, 0.87);
 	--main-bg-clr: #f3f4f6;
+
+	--main-btn-clr: #f5f5f5;
+
 	--focus-input-clr: #3b83f6;
+	--focus-btn-clr: black;
 
 	/* Define some css variables for some common colors that we'll use */
 	--clr-dark-slate: #334155;
@@ -65,6 +69,7 @@ h1 {
 button {
 	border: none;
 	cursor: pointer;
+	transition: var(--transition);
 }
 
 .button-shrink {

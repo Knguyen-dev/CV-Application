@@ -23,57 +23,75 @@ BOOK MARK: Scratch the custom form idea for now. Right now just make the 3 separ
 */
 
 import "../styles/Forms.css";
-function PersonalInfoForm() {
+
+// function CustomForm({elementID, formFields}) {
+// 	return (
+// 		<form id={elementID}></form>
+// 	)
+
+// }
+
+function PersonalInfoForm({ isOpen, handleIsOpen }) {
 	return (
 		<div className="edit-section">
-			<h2>Personal Details</h2>
+			<header>
+				<h2>Personal Details</h2>
+				<button
+					className="drop-down-btn button-shrink"
+					onClick={() => handleIsOpen(!isOpen)}
+				>
+					{isOpen ? "Less" : "More"}
+				</button>
+			</header>
 
-			<form id="personal-info-form" className="custom-form">
-				<div className="input-group">
-					<label htmlFor="input-full-name">
-						<span className="label-text">Full name</span>
-					</label>
-					<input
-						type="text"
-						name="full-name"
-						id="input-full-name"
-						placeholder="Enter full name"
-					/>
-				</div>
-				<div className="input-group">
-					<label htmlFor="input-email">
-						<span className="label-text">Email</span>
-					</label>
-					<input
-						type="email"
-						name="email"
-						id="input-email"
-						placeholder="Enter email"
-					/>
-				</div>
-				<div className="input-group">
-					<label htmlFor="input-phone-number">
-						<span className="label-text">Phone Number</span>
-					</label>
-					<input
-						type="text"
-						name="phone-number"
-						id="input-phone-number"
-						placeholder="Enter phone number"
-					/>
-				</div>
-				<div className="input-group">
-					<label htmlFor="input-address">
-						<span className="label-text">Address</span>
-					</label>
-					<input
-						type="text"
-						name="address"
-						id="input-address"
-						placeholder="Enter address"
-					/>
-				</div>
-			</form>
+			{isOpen ? (
+				<form id="personal-info-form" className="custom-form">
+					<div className="input-group">
+						<label htmlFor="input-full-name">
+							<span className="label-text">Full name</span>
+						</label>
+						<input
+							type="text"
+							name="full-name"
+							id="input-full-name"
+							placeholder="Enter full name"
+						/>
+					</div>
+					<div className="input-group">
+						<label htmlFor="input-email">
+							<span className="label-text">Email</span>
+						</label>
+						<input
+							type="email"
+							name="email"
+							id="input-email"
+							placeholder="Enter email"
+						/>
+					</div>
+					<div className="input-group">
+						<label htmlFor="input-phone-number">
+							<span className="label-text">Phone Number</span>
+						</label>
+						<input
+							type="text"
+							name="phone-number"
+							id="input-phone-number"
+							placeholder="Enter phone number"
+						/>
+					</div>
+					<div className="input-group">
+						<label htmlFor="input-address">
+							<span className="label-text">Address</span>
+						</label>
+						<input
+							type="text"
+							name="address"
+							id="input-address"
+							placeholder="Enter address"
+						/>
+					</div>
+				</form>
+			) : null}
 		</div>
 	);
 }
