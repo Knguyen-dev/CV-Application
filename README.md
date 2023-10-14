@@ -5,6 +5,18 @@ BOOK MARK: Webpack and vite don't work well together so there's no need
    "components" folder in src for all of the components and the 
    "styles" folder in src for all of the css styles for those components.
    
+Components: 
+   1. One probably for adding sections of info. Like when adding a new school or job experience. Would probably be something like CVSection.
+
+   2. A component for creating a form, 
+   so CustomForm, makes sense. Probably pass in an array of objects that lists the parameters of the input. Maybe.
+
+   3. CustomInput makes sense as we're going to make it so as the user changes stuff in the fields, it changes stuff on the CV in real time
+
+   4. FormField could be one, where 
+   it's a label and an input. Could be helpful when creating the forms
+
+   5. I feel like CVSection could be a component. Like if they only have education and no work experience, we would only have a education section on the cv. Then in that education section we'd render the entries.
 
 
 
