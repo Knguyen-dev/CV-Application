@@ -33,19 +33,25 @@ EditSideBar.propTypes = {
 	onTabChange: PropTypes.func,
 };
 
-function ResumeActions() {
+function ResumeActions({ loadExampleResume, clearResume }) {
 	return (
 		<div className="resume-actions edit-section">
 			<h2>Resume Actions</h2>
 			<div className="action-btns-container">
-				<button className="load-example-btn button-shrink">
+				<button
+					className="load-example-btn button-shrink"
+					onClick={loadExampleResume}
+				>
 					<span>Load Example Resume</span>
 				</button>
 				<button className="download-resume-btn button-shrink">
 					<span className="material-symbols-outlined">download</span>
 					<span>Download</span>
 				</button>
-				<button className="clear-resume-btn button-shrink">
+				<button
+					className="clear-resume-btn button-shrink"
+					onClick={clearResume}
+				>
 					<span className="material-symbols-outlined">delete</span>
 					<span>Clear Resume</span>
 				</button>
@@ -53,6 +59,10 @@ function ResumeActions() {
 		</div>
 	);
 }
+ResumeActions.propTypes = {
+	loadExampleResume: PropTypes.func,
+	clearResume: PropTypes.func,
+};
 
 /*
 + tabType: "content" or "customize"
@@ -67,9 +77,13 @@ function ResumeActions() {
 
 */
 
-function EditPanel() {
+function EditPanel({
+	loadExampleResume,
+	clearResume,
+	handlePersonalForm,
+	personalFields,
+}) {
 	const [tabType, setTabType] = useState("content");
-
 	const [isOpen, setIsOpen] = useState({
 		personalInfoForm: true,
 	});
@@ -78,7 +92,17 @@ function EditPanel() {
 	const tabContent = {
 		content: (
 			<>
-				<PersonalInfoForm isOpen={isOpen} handleIsOpen={setIsOpen} />
+				<PersonalInfoForm
+					handleForm={handlePersonalForm}
+					formFields={personalFields}
+					isOpen={isOpen.personalInfoForm}
+					toggleIsOpen={() => {
+						setIsOpen({
+							...isOpen,
+							personalInfoForm: !isOpen.personalInfoForm,
+						});
+					}}
+				/>
 			</>
 		),
 		customize: (
@@ -92,12 +116,20 @@ function EditPanel() {
 		<div className="edit-panel">
 			<EditSideBar tabType={tabType} onTabChange={setTabType} />
 			<div className="form-section">
-				<ResumeActions />
-
+				<ResumeActions
+					loadExampleResume={loadExampleResume}
+					clearResume={clearResume}
+				/>
 				{tabContent[tabType]}
 			</div>
 		</div>
 	);
 }
+EditPanel.propTypes = {
+	loadExampleResume: PropTypes.func,
+	clearResume: PropTypes.func,
+	handlePersonalForm: PropTypes.func,
+	personalFields: PropTypes.array,
+};
 
 export default EditPanel;

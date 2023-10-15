@@ -1,15 +1,13 @@
 import "../styles/Forms.css";
 import PropTypes from "prop-types";
-
 /*
 + FormFields: Reusable component that creates form fields.
 
 1. formFields: Array of objects that's going to create the form fields
-2. onChange: Function to be called when input fields are changed. We're 
-	planning it so that this function will change some state representing 
-	form data in an upper component. 
+2. fieldValues: Object that has keys, which are the values of 
+	inputID from formFields.
 */
-function FormFields({ formFields, onChange }) {
+function FormFields({ onChange, formFields }) {
 	return (
 		<>
 			{formFields.map((field) => {
@@ -23,6 +21,7 @@ function FormFields({ formFields, onChange }) {
 							name={field.name}
 							id={field.inputID}
 							placeholder={field.placeholder}
+							value={field.value}
 							onChange={onChange}
 						/>
 					</div>
@@ -31,59 +30,28 @@ function FormFields({ formFields, onChange }) {
 		</>
 	);
 }
-
 FormFields.propTypes = {
+	onChange: PropTypes.func,
 	formFields: PropTypes.arrayOf(
-		PropTypes.exact({
+		PropTypes.shape({
 			name: PropTypes.string,
 			type: PropTypes.string,
 			label: PropTypes.string,
 			inputID: PropTypes.string,
 			placeholder: PropTypes.string,
+			value: PropTypes.string,
 		})
 	),
-	onChange: PropTypes.func,
 };
 
-function PersonalInfoForm({ isOpen, handleIsOpen }) {
-	const formFields = [
-		{
-			name: "full-name",
-			type: "text",
-			label: "Full name",
-			inputID: "input-full-name",
-			placeholder: "Enter full name",
-		},
-		{
-			name: "email",
-			type: "email",
-			label: "Email",
-			inputID: "input-email",
-			placeholder: "Enter email address",
-		},
-		{
-			name: "phone-number",
-			type: "text",
-			label: "Phone number",
-			inputID: "input-phone-number",
-			placeholder: "Enter phone number",
-		},
-		{
-			name: "address",
-			type: "text",
-			label: "Address",
-			inputID: "input-address",
-			placeholder: "Enter address",
-		},
-	];
-
+function PersonalInfoForm({ handleForm, formFields, isOpen, toggleIsOpen }) {
 	return (
 		<div className="edit-section">
 			<header>
 				<h2>Personal Details</h2>
 				<button
 					className="drop-down-btn button-shrink"
-					onClick={() => handleIsOpen(!isOpen)}
+					onClick={toggleIsOpen}
 				>
 					{isOpen ? "Less" : "More"}
 				</button>
@@ -91,16 +59,17 @@ function PersonalInfoForm({ isOpen, handleIsOpen }) {
 
 			{isOpen ? (
 				<form id="personal-info-form">
-					<FormFields formFields={formFields} />
+					<FormFields onChange={handleForm} formFields={formFields} />
 				</form>
 			) : null}
 		</div>
 	);
 }
-
 PersonalInfoForm.propTypes = {
+	handleForm: PropTypes.func,
+	formFields: PropTypes.array,
 	isOpen: PropTypes.bool,
-	handleIsOpen: PropTypes.func,
+	toggleIsOpen: PropTypes.func,
 };
 
 export { PersonalInfoForm };
