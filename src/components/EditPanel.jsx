@@ -1,8 +1,9 @@
 import "../styles/EditPanel.css";
 import { PersonalInfoForm } from "./Forms";
+import PropTypes from "prop-types";
 import { useState } from "react";
 
-// Affects the content of the form
+// Section for switching tabs, which affects the content of the form-section
 function EditSideBar({ tabType, onTabChange }) {
 	return (
 		<div className="edit-sidebar edit-section">
@@ -27,6 +28,10 @@ function EditSideBar({ tabType, onTabChange }) {
 		</div>
 	);
 }
+EditSideBar.propTypes = {
+	tabType: PropTypes.string,
+	onTabChange: PropTypes.func,
+};
 
 function ResumeActions() {
 	return (
