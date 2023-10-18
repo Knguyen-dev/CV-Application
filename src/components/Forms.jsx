@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 */
 function FormFields({ onChange, formFields }) {
 	return (
-		<>
+		<div className="form-fields">
 			{formFields.map((field) => {
 				return (
 					<div key={field.inputID} className="input-group">
@@ -27,7 +27,7 @@ function FormFields({ onChange, formFields }) {
 					</div>
 				);
 			})}
-		</>
+		</div>
 	);
 }
 FormFields.propTypes = {
@@ -44,25 +44,11 @@ FormFields.propTypes = {
 	),
 };
 
-function PersonalInfoForm({ handleForm, formFields, isOpen, toggleIsOpen }) {
+function PersonalInfoForm({ handleForm, formFields }) {
 	return (
-		<div className="edit-section">
-			<header>
-				<h2>Personal Details</h2>
-				<button
-					className="drop-down-btn button-shrink"
-					onClick={toggleIsOpen}
-				>
-					{isOpen ? "Less" : "More"}
-				</button>
-			</header>
-
-			{isOpen ? (
-				<form id="personal-info-form">
-					<FormFields onChange={handleForm} formFields={formFields} />
-				</form>
-			) : null}
-		</div>
+		<form id="personal-info-form">
+			<FormFields onChange={handleForm} formFields={formFields} />
+		</form>
 	);
 }
 PersonalInfoForm.propTypes = {
@@ -72,4 +58,22 @@ PersonalInfoForm.propTypes = {
 	toggleIsOpen: PropTypes.func,
 };
 
-export { PersonalInfoForm };
+function SchoolForm({ handleForm, formFields }) {
+	return (
+		<form id="education-form">
+			<FormFields onChange={handleForm} formFields={formFields} />
+			<div className="form-btn-container">
+				<button className="delete-btn">Delete</button>
+				<button className="cancel-btn">Cancel</button>
+				<button className="save-btn">Save</button>
+			</div>
+		</form>
+	);
+}
+SchoolForm.propTypes = {
+	handleForm: PropTypes.func,
+	formFields: PropTypes.array,
+	isOpen: PropTypes.bool,
+	toggleIsOpen: PropTypes.func,
+};
+export { PersonalInfoForm, SchoolForm };

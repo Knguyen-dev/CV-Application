@@ -1,23 +1,24 @@
 /* Should be able to use css variables from index.jss */
 
 #app-container {
-    display: grid;
-    min-height: 100vh;
-    grid-template-rows: auto 1fr auto;
+	display: grid;
+	min-height: 100vh;
+	grid-template-rows: auto 1fr auto;
 }
 
 #app-header,
 #app-footer {
-    background-color: var(--clr-emerald);
-    padding: 8px;
-    text-align: center;
+	background-color: var(--clr-emerald);
+	padding: 8px;
+	text-align: center;
 }
 #app-main {
-    background-color: var(--main-bg-clr);
-    display: flex;
-    padding: 16px 24px;
+	background-color: var(--main-bg-clr);
+	display: flex;
+	padding: 16px 24px;
+	column-gap: 12px;
 }
 
 .footer-nav {
-    margin-top: 8px;
+	margin-top: 8px;
 }

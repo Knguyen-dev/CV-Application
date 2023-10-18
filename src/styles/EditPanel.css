@@ -20,7 +20,7 @@
 }
 
 .edit-panel {
-	width: 40%;
+	flex: 0 1 50%;
 	height: min-content;
 	display: flex;
 	align-items: flex-start;
@@ -38,6 +38,11 @@
 .sidebar-btn.active-btn {
 	background-color: var(--clr-light-blue);
 	color: white;
+}
+
+.edit-section header {
+	display: flex;
+	align-items: center;
 }
 
 .edit-section h2 {
@@ -68,4 +73,19 @@
 	font-weight: 700;
 	gap: 24px;
 	font-size: 16px;
+}
+
+.school-list {
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+}
+.school-list-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.school-list-item .school-name {
+	font-weight: 600;
+	font-size: 18px;
 }

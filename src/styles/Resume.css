@@ -1,0 +1,82 @@
+.resume {
+	border: 2px solid black;
+	flex: 1 1 auto;
+	display: grid;
+	grid-template-rows: auto 1fr;
+}
+
+/* Styling resume header */
+.personal-details {
+	padding: 32px 16px;
+	background-color: var(--clr-dark-indigo);
+	color: white;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	row-gap: 12px;
+}
+.resume-name {
+	font-size: 32px;
+}
+.resume-contact-info {
+	display: flex;
+	justify-content: space-evenly;
+}
+.contact-section {
+	display: flex;
+	align-items: center;
+	column-gap: 8px;
+}
+
+/* Styling resume body */
+.resume-body {
+	display: flex;
+	flex-direction: column;
+	padding: 16px 0;
+}
+
+.resume-section {
+	border: 2px solid black;
+	width: 85%;
+	margin: 0 auto;
+}
+
+/* Styling resume-section  */
+.resume-section-header {
+	text-align: center;
+	font-weight: 700;
+	font-size: 22px;
+	background-color: var(--resume-section-header-clr);
+	color: var(--clr-dark-indigo);
+	padding: 4px 0;
+}
+.resume .institution-name {
+	font-weight: 700;
+}
+.resume-info-list {
+	display: flex;
+	flex-direction: column;
+	row-gap: 12px;
+	margin-top: 12px;
+}
+
+/* Styling the education section */
+
+.resume-info-item {
+	display: flex;
+	gap: 16px;
+}
+
+.resume-info-group {
+	display: flex;
+	flex-direction: column;
+	row-gap: 4px;
+}
+
+.resume-info-group-minor {
+	flex: 0 0 25%;
+}
+
+.resume-info-group-major {
+	flex: 1;
+}

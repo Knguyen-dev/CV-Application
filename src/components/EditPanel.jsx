@@ -1,5 +1,5 @@
 import "../styles/EditPanel.css";
-import { PersonalInfoForm } from "./Forms";
+import { PersonalInfoForm, SchoolForm } from "./Forms";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -82,27 +82,85 @@ function EditPanel({
 	clearResume,
 	handlePersonalForm,
 	personalFields,
+	handleSchoolForm,
+	schoolFields,
 }) {
 	const [tabType, setTabType] = useState("content");
 	const [isOpen, setIsOpen] = useState({
 		personalInfoForm: true,
+		schoolForm: true,
 	});
+
+	/*
+	- Html markup for all schools, each element should be a school-list-item
+		and we plan to render it in school-list ul element also
+
+		<ul className="school-list">
+			<div className="school-list-item">
+				<span className="school-name">
+					School 1
+				</span>
+				<button>Hide</button>
+			</div>
+		</ul>
+	
+	
+	*/
+	const schoolList = [];
 
 	// Based on the state, render components for 'form-section'
 	const tabContent = {
 		content: (
 			<>
-				<PersonalInfoForm
-					handleForm={handlePersonalForm}
-					formFields={personalFields}
-					isOpen={isOpen.personalInfoForm}
-					toggleIsOpen={() => {
-						setIsOpen({
-							...isOpen,
-							personalInfoForm: !isOpen.personalInfoForm,
-						});
-					}}
-				/>
+				<div className="edit-section">
+					<header>
+						<h2>Personal Details</h2>
+						<button
+							className="drop-down-btn button-shrink"
+							onClick={() => {
+								setIsOpen({
+									...isOpen,
+									personalInfoForm: !isOpen.personalInfoForm,
+								});
+							}}
+						>
+							{isOpen.personalInfoForm ? "Less" : "More"}
+						</button>
+					</header>
+
+					{isOpen.personalInfoForm ? (
+						<PersonalInfoForm
+							handleForm={handlePersonalForm}
+							formFields={personalFields}
+						/>
+					) : null}
+				</div>
+
+				<div className="edit-section">
+					<header>
+						<h2>Education</h2>
+						<button
+							className="drop-down-btn button-shrink"
+							onClick={() => {
+								setIsOpen({
+									...isOpen,
+									schoolForm: !isOpen.schoolForm,
+								});
+							}}
+						>
+							{isOpen.schoolForm ? "Less" : "More"}
+						</button>
+					</header>
+
+					{isOpen.schoolForm ? (
+						<>
+							<SchoolForm
+								handleForm={handleSchoolForm}
+								formFields={schoolFields}
+							/>
+						</>
+					) : null}
+				</div>
 			</>
 		),
 		customize: (
@@ -130,6 +188,8 @@ EditPanel.propTypes = {
 	clearResume: PropTypes.func,
 	handlePersonalForm: PropTypes.func,
 	personalFields: PropTypes.array,
+	handleSchoolForm: PropTypes.func,
+	schoolFields: PropTypes.array,
 };
 
 export default EditPanel;
