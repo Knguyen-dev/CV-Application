@@ -84,29 +84,120 @@ function EditPanel({
 	personalFields,
 	handleSchoolForm,
 	schoolFields,
+	submitSchoolForm,
+	schoolList,
 }) {
+	console.log("hi");
+
 	const [tabType, setTabType] = useState("content");
+
+	/*
+
+	- Keep the personal details form open, treat
+	it differently from education, and professional experiences since 
+	those can have a list of items, these are special forms.
+
+	isOpen: Object of booleans used to remember if a drop down was open or not. No two collapsible
+		sections can be opened at the same time. So if 'schoolSection' is opened,
+		all other sections will be closed, etc. 
+
+	isActiveForm: Object of booleans used to remember when the user still had a 
+		particular form opened or not. Multiple forms would be able to be 
+		'active' at the same time, which is good since if a user goes back to a 
+		section where they opened the form but never canceled it, they'll still see
+		their form is still opened.
+	*/
+
 	const [isOpen, setIsOpen] = useState({
-		personalInfoForm: true,
-		schoolForm: true,
+		schoolSection: true,
+	});
+
+	const [isActiveForm, setIsActiveForm] = useState({
+		schoolForm: false,
 	});
 
 	/*
-	- Html markup for all schools, each element should be a school-list-item
-		and we plan to render it in school-list ul element also
+	- Function for opening and closing specific sections 
+		of the edit panel. Such as education, professional experiences, etc.
 
-		<ul className="school-list">
-			<div className="school-list-item">
-				<span className="school-name">
-					School 1
-				</span>
-				<button>Hide</button>
-			</div>
-		</ul>
-	
-	
+	- If (openValue): Section was already open beforehand so now they're closing it.
+		Here, we'll also deactivate the form for them.
+
+	- Else user is trying to open a closed section, so open it the one
+	 	the user clicked and close all other sections
 	*/
-	const schoolList = [];
+	const toggleIsOpen = (sectionName) => {
+		const openValue = isOpen[sectionName];
+		if (openValue) {
+			setIsOpen({ ...isOpen, [sectionName]: false });
+		} else {
+			const newIsOpen = {};
+			for (const key in isOpen) {
+				if (key === sectionName) {
+					newIsOpen[key] = true;
+				} else {
+					newIsOpen[key] = false;
+				}
+			}
+			setIsOpen(newIsOpen);
+		}
+	};
+
+	// Create Markup for the education or school section
+	const educationSection = (
+		<div className="edit-section">
+			<header>
+				<h2>Education</h2>
+				<button
+					className="drop-down-btn button-shrink"
+					onClick={() => toggleIsOpen("schoolSection")}
+				>
+					{isOpen.schoolSection ? "Less" : "More"}
+				</button>
+			</header>
+			<section className="edit-section-body">
+				{isOpen.schoolSection && !isActiveForm.schoolForm ? (
+					/*
+					- When the school section is open and its form isn't active:
+						1. Render the listed schools on the sidebar.
+						2. Render button for opening the form and adding more schools.
+					*/
+					<>
+						<div className="open-form-btn-container">
+							<button
+								className="open-form-btn button-shrink"
+								onClick={() =>
+									setIsActiveForm({
+										...isActiveForm,
+										schoolForm: true,
+									})
+								}
+							>
+								<span className="material-symbols-outlined">
+									add
+								</span>
+								<span>Add School</span>
+							</button>
+						</div>
+					</>
+				) : null}
+
+				{isOpen.schoolSection && isActiveForm.schoolForm ? (
+					<SchoolForm
+						handleForm={handleSchoolForm}
+						closeForm={() =>
+							setIsActiveForm({
+								...isActiveForm,
+								schoolForm: false,
+							})
+						}
+						formFields={schoolFields}
+						submitForm={submitSchoolForm}
+					/>
+				) : null}
+			</section>
+		</div>
+	);
 
 	// Based on the state, render components for 'form-section'
 	const tabContent = {
@@ -115,52 +206,13 @@ function EditPanel({
 				<div className="edit-section">
 					<header>
 						<h2>Personal Details</h2>
-						<button
-							className="drop-down-btn button-shrink"
-							onClick={() => {
-								setIsOpen({
-									...isOpen,
-									personalInfoForm: !isOpen.personalInfoForm,
-								});
-							}}
-						>
-							{isOpen.personalInfoForm ? "Less" : "More"}
-						</button>
 					</header>
-
-					{isOpen.personalInfoForm ? (
-						<PersonalInfoForm
-							handleForm={handlePersonalForm}
-							formFields={personalFields}
-						/>
-					) : null}
+					<PersonalInfoForm
+						handleForm={handlePersonalForm}
+						formFields={personalFields}
+					/>
 				</div>
-
-				<div className="edit-section">
-					<header>
-						<h2>Education</h2>
-						<button
-							className="drop-down-btn button-shrink"
-							onClick={() => {
-								setIsOpen({
-									...isOpen,
-									schoolForm: !isOpen.schoolForm,
-								});
-							}}
-						>
-							{isOpen.schoolForm ? "Less" : "More"}
-						</button>
-					</header>
-
-					{isOpen.schoolForm ? (
-						<>
-							<SchoolForm
-								handleForm={handleSchoolForm}
-								formFields={schoolFields}
-							/>
-						</>
-					) : null}
-				</div>
+				{educationSection}
 			</>
 		),
 		customize: (
@@ -190,6 +242,8 @@ EditPanel.propTypes = {
 	personalFields: PropTypes.array,
 	handleSchoolForm: PropTypes.func,
 	schoolFields: PropTypes.array,
+	submitSchoolForm: PropTypes.func,
+	schoolList: PropTypes.array,
 };
 
 export default EditPanel;

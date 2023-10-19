@@ -23,6 +23,15 @@ const exampleResumeData = {
 			"start-date": "08/2014",
 			"end-date": "09/2017",
 			address: "123 S Parmesiano CT",
+			isVisible: true,
+		},
+		{
+			"school-name": "Hogwarts Technical College",
+			"degree-type": "Culinary",
+			"start-date": "02/2010",
+			"end-date": "05/2014",
+			address: "123 N Diagon Alley",
+			isVisible: true,
 		},
 	],
 };
@@ -70,6 +79,7 @@ const schoolFormFields = [
 		inputID: "input-school-name",
 		placeholder: "Enter school / university",
 		value: "",
+		isRequired: true,
 	},
 	{
 		name: "degree-type",
@@ -78,6 +88,7 @@ const schoolFormFields = [
 		inputID: "input-degree-type",
 		placeholder: "Enter Degree / Field Of Study",
 		value: "",
+		isRequired: true,
 	},
 	{
 		name: "start-date",
@@ -86,6 +97,7 @@ const schoolFormFields = [
 		inputID: "input-start-date",
 		placeholder: "Enter start date in format (mm/yyyy)",
 		value: "",
+		isRequired: true,
 	},
 	{
 		name: "end-date",
@@ -94,6 +106,7 @@ const schoolFormFields = [
 		inputID: "input-end-date",
 		placeholder: "Enter end date in format (mm/yyyy)",
 		value: "",
+		isRequired: true,
 	},
 	{
 		name: "address",
@@ -102,6 +115,7 @@ const schoolFormFields = [
 		inputID: "input-school-address",
 		placeholder: "Enter address of respective school",
 		value: "",
+		isRequired: true,
 	},
 ];
 

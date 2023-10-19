@@ -111,10 +111,11 @@ function App() {
 	});
 
 	// Create list to store schools that the user saved into the application
+	// NOTE: Should consist of all data fields from schoolFormData, but also "isVisible: true/false" field
 	const [schoolList, setSchoolList] = useState([]);
 
 	// Create state to track the index of the school that the form is focusing on.
-	const [schoolIndex, setSchoolIndex] = useState(0);
+	const [editIndex, setEditIndex] = useState(0);
 
 	// Create state to track whether the user is editing an existing school or not
 	const [isEdit, setIsEdit] = useState(false);
@@ -122,6 +123,7 @@ function App() {
 	// Create functions for clearing and loading entire resume with data
 	const loadExampleResume = () => {
 		setPersonalFormData(exampleResumeData.personalInfo);
+		setSchoolList(exampleResumeData.schoolList);
 	};
 
 	const clearResume = () => {
@@ -146,9 +148,56 @@ function App() {
 		});
 	};
 
-	// const submitSchoolForm = (e) => {...}
+	const resetSchoolFormData = () => {
+		setSchoolFormData(initialSchoolFormData);
+	};
 
-	// function deleteSchool(...) {...}
+	/*
+	- Submission can be either editing/saving changes to an existing 
+		school, or adding a new school.
+	
+	1. Construct new school object from form data
+	- If the user is editing a school:
+		1. Replace the schoolObj in 'schoolIndex' with the 
+			newSchoolObj that represents the new changes.
+		2. Maintain the visibility attribute by getting a copy of the edited
+			school object from an array.
+		3. Then set isEdit to false, because we're now done 
+			editing.
+
+	- Else the user is adding a new school:
+		1. Set isVisible to true since that's the default when adding	
+		2. Then append the new school object to the end of an array that
+			is a copy of the state array (schoolList).
+		3. Finally set the state
+	*/
+	const submitSchoolForm = (e) => {
+		e.preventDefault();
+
+		// Using FormData object, create our newSchoolObj from our form data
+		const formData = new FormData(e.target);
+		let newSchoolObj = {};
+		formData.forEach((value, key) => {
+			newSchoolObj[key] = value;
+		});
+
+		let newSchoolList = [...schoolList];
+		if (isEdit) {
+			newSchoolObj.isVisible = newSchoolList[editIndex].isVisible;
+			newSchoolList[editIndex] = newSchoolObj;
+			setSchoolList(newSchoolList);
+			setIsEdit(false);
+		} else {
+			newSchoolObj.isVisible = true;
+			newSchoolList.push(newSchoolObj);
+			setSchoolList(newSchoolList);
+		}
+
+		// Reset the form using the state
+		resetSchoolFormData();
+
+		// Then deactivate/exit out of form, just hide it
+	};
 
 	return (
 		<div id="app-container">
@@ -161,8 +210,16 @@ function App() {
 					personalFields={personalFields}
 					handleSchoolForm={handleSchoolForm}
 					schoolFields={schoolFields}
+					submitSchoolForm={submitSchoolForm}
+					schoolList={schoolList}
 				/>
-				<Resume personalFormData={personalFormData} />
+				<Resume
+					personalFormData={personalFormData}
+					schoolList={schoolList}
+					schoolFormData={schoolFormData}
+					isEdit={isEdit}
+					editIndex={editIndex}
+				/>
 			</main>
 			<Footer />
 		</div>

@@ -5,6 +5,7 @@
 	border-radius: var(--border-radius);
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	gap: 8px;
 }
 
@@ -12,6 +13,8 @@
 	background-color: var(--main-btn-clr);
 	border-radius: var(--border-radius);
 	padding: 12px;
+	display: flex;
+	align-items: center;
 }
 
 .edit-section header {
@@ -20,7 +23,7 @@
 }
 
 .edit-panel {
-	flex: 0 1 50%;
+	flex: 0 1 45%;
 	height: min-content;
 	display: flex;
 	align-items: flex-start;
@@ -28,9 +31,7 @@
 }
 
 .sidebar-btn {
-	display: flex;
 	flex-direction: column;
-	align-items: center;
 	font-size: 16px;
 	font-weight: 700;
 }
@@ -45,9 +46,30 @@
 	align-items: center;
 }
 
+.drop-down-btn {
+	font-size: 16px;
+	border: 2px solid var(--clr-emerald);
+	color: var(--clr-emerald);
+	font-weight: 700;
+}
+.drop-down-btn:hover {
+	background-color: var(--clr-emerald);
+	color: white;
+}
+
 .edit-section h2 {
 	margin-bottom: 4px;
 }
+
+/*
+
+1. Make fields required on the education form
+2. Work on cancelling the form.
+3. Work on sidebar rendering 
+4. Work on deleting
+5. Work on editing
+
+*/
 
 .form-section {
 	width: 65%;
@@ -67,25 +89,31 @@
 }
 
 .action-btns-container button {
-	display: flex;
-	align-items: center;
 	padding: 8px 12px;
 	font-weight: 700;
 	gap: 24px;
 	font-size: 16px;
 }
 
-.school-list {
+.sidebar-list {
 	display: flex;
 	flex-direction: column;
 	row-gap: 8px;
 }
-.school-list-item {
+.sidebar-list-item {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
-.school-list-item .school-name {
+.sidebar-list-item .institution-name {
 	font-weight: 600;
 	font-size: 18px;
+}
+
+.open-form-btn-container {
+	display: flex;
+	justify-content: center;
+}
+.open-form-btn {
+	border-radius: var(--border-radius);
 }

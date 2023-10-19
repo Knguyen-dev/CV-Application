@@ -5,14 +5,21 @@ import PropTypes from "prop-types";
     a ResumeInfoItem can show a single school or job you attended, how long 
     you stayed there, and corresponding information related to that
     job or school.
+
+- Conditional on start-end-dates so that the markup is generated when either one of the dates
+	is being filled in. Without this, the markup appears and the hypen appears which is unusual. Now 
+	Now even when other fields are being filled in, the markup for dates only appears 
+	when either one of the dates are being filled in.
 */
 function ResumeInfoItem({ itemType, itemData }) {
 	return (
 		<div className="resume-info-item">
 			<div className="resume-info-group resume-info-group-minor">
-				<p className="start-end-dates">
-					{itemData["start-date"]} - {itemData["end-date"]}
-				</p>
+				{itemData["start-date"] || itemData["end-date"] ? (
+					<p className="start-end-dates">
+						{itemData["start-date"]} - {itemData["end-date"]}
+					</p>
+				) : null}
 				<p className="institution-address">{itemData["address"]}</p>
 			</div>
 			<div className="resume-info-group resume-info-group-major">
@@ -66,7 +73,7 @@ function ResumeSection({ sectionTitle, itemType, itemDataList }) {
 					return (
 						<ResumeInfoItem
 							key={index}
-							type={itemType}
+							itemType={itemType}
 							itemData={itemData}
 						/>
 					);
@@ -81,4 +88,4 @@ ResumeSection.propTypes = {
 	itemDataList: PropTypes.array,
 };
 
-export default ResumeSection;
+export { ResumeSection, ResumeInfoItem };

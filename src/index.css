@@ -40,6 +40,9 @@ video {
 	--clr-light-teal: #5eead4;
 	--clr-light-blue: #38bdf8;
 	--clr-dark-indigo: #0e374e;
+	--delete-btn-clr: #ff0000;
+	--save-btn-clr: #1da1f2;
+	--cancel-btn-clr: #aab8c2;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;

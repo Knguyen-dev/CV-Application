@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 2. fieldValues: Object that has keys, which are the values of 
 	inputID from formFields.
 */
+
 function FormFields({ onChange, formFields }) {
 	return (
 		<div className="form-fields">
@@ -23,6 +24,7 @@ function FormFields({ onChange, formFields }) {
 							placeholder={field.placeholder}
 							value={field.value}
 							onChange={onChange}
+							required={field.isRequired ? true : false}
 						/>
 					</div>
 				);
@@ -58,14 +60,23 @@ PersonalInfoForm.propTypes = {
 	toggleIsOpen: PropTypes.func,
 };
 
-function SchoolForm({ handleForm, formFields }) {
+function SchoolForm({ handleForm, closeForm, submitForm, formFields }) {
 	return (
-		<form id="education-form">
+		<form id="education-form" onSubmit={submitForm}>
 			<FormFields onChange={handleForm} formFields={formFields} />
 			<div className="form-btn-container">
-				<button className="delete-btn">Delete</button>
-				<button className="cancel-btn">Cancel</button>
-				<button className="save-btn">Save</button>
+				<button className="button-shrink delete-btn">Delete</button>
+				<div>
+					<button
+						className="button-shrink cancel-btn"
+						onClick={closeForm}
+					>
+						Cancel
+					</button>
+					<button className="button-shrink save-btn" type="submit">
+						Save
+					</button>
+				</div>
 			</div>
 		</form>
 	);
@@ -73,7 +84,8 @@ function SchoolForm({ handleForm, formFields }) {
 SchoolForm.propTypes = {
 	handleForm: PropTypes.func,
 	formFields: PropTypes.array,
-	isOpen: PropTypes.bool,
-	toggleIsOpen: PropTypes.func,
+	handleDelete: PropTypes.func,
+	closeForm: PropTypes.func,
+	submitForm: PropTypes.func,
 };
 export { PersonalInfoForm, SchoolForm };

@@ -1,7 +1,3 @@
-.custom-form {
-	display: flex;
-	flex-direction: column;
-}
 .input-group {
 	display: flex;
 	flex-direction: column;
@@ -28,4 +24,43 @@
 }
 .input-group input:focus {
 	border-color: var(--focus-input-clr);
+}
+
+.form-btn-container {
+	margin-top: 16px;
+	display: flex;
+	justify-content: space-between;
+}
+.form-btn-container button {
+	font-size: 16px;
+	font-weight: 700;
+}
+.form-btn-container div {
+	display: flex;
+	column-gap: 12px;
+}
+
+.delete-btn {
+	border: 2px solid var(--delete-btn-clr);
+	color: var(--delete-btn-clr);
+}
+.delete-btn:hover {
+	background-color: var(--delete-btn-clr);
+	color: white;
+}
+
+.cancel-btn {
+	border: 2px solid var(--cancel-btn-clr);
+}
+.cancel-btn:hover {
+	background-color: var(--cancel-btn-clr);
+	color: white;
+}
+
+.save-btn {
+	border: 2px solid var(--save-btn-clr);
+}
+.save-btn:hover {
+	background-color: var(--save-btn-clr);
+	color: white;
 }
