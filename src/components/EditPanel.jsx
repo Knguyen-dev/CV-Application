@@ -87,8 +87,6 @@ function EditPanel({
 	submitSchoolForm,
 	schoolList,
 }) {
-	console.log("hi");
-
 	const [tabType, setTabType] = useState("content");
 
 	/*

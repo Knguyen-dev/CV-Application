@@ -46,5 +46,9 @@ Components:
 
 
 - Issues:
-2. Drop downs could be smoother.
-3. Resume actions should travel with the user
+1. Loading example data for schoolList doesn't render it.
+2. "Submission canceled because form isn't connected".
+3. Having issues importing the SidebarList. Could it be something wrong with keys?.
+4. Need to work on editing 
+5. Need to work on deleting
+6. add a form for professional experiences and do the thing again
