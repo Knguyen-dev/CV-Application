@@ -98,7 +98,10 @@ function ItemForm({
 					className={`button-shrink delete-btn ${
 						!isEdit ? "btn-hidden" : ""
 					}`}
-					onClick={deleteItem}
+					onClick={() => {
+						deleteItem();
+						closeForm();
+					}}
 				>
 					Delete
 				</button>

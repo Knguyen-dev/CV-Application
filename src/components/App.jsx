@@ -57,17 +57,16 @@ function App() {
 
 	/*
 	- Set up school form and school storage:
-		1. initialSchoolFormData: Object, which is a copy of the state
-			but the values are empty strings. Good for reseting form fields.
-		2. schoolFormData: State that tracks input of form
-		3. schoolFields: Form fields that will be rendered that 
-			also reflect the input values of the state
-		4. schoolList: List to store school objects that the user saved into the application
-		5. editIndex: Boolean to indicate which school object is being edited in schoolList
-		6. isEdit: Boolean that indicates whether the user is editing an existing school object or 
-			adding a new one.
-		*/
-
+	1. initialSchoolFormData: Object, which is a copy of the state
+		but the values are empty strings. Good for reseting form fields.
+	2. schoolFormData: State that tracks input of form
+	3. schoolFields: Form fields that will be rendered that 
+		also reflect the input values of the state
+	4. schoolList: List to store school objects that the user saved into the application
+	5. editIndex: Boolean to indicate which school object is being edited in schoolList
+	6. isEdit: Boolean that indicates whether the user is editing an existing school object or 
+		adding a new one.
+	*/
 	let initialSchoolFormData = {};
 	schoolFormFields.forEach((field) => {
 		initialSchoolFormData[field.name] = "";
@@ -79,98 +78,131 @@ function App() {
 	});
 
 	const [schoolList, setSchoolList] = useState([]);
+
+	/*
+	- Set up variables to track when the user is editing and 
+		the index of the item that they're editing.
+	*/
 	const [editIndex, setEditIndex] = useState(0);
 	const [isEdit, setIsEdit] = useState(false);
 
-	// Create functions for clearing and loading entire resume with data
+	/*
+	- Set up a map that has all of the setters we want and related info that helps 
+		their functionality.
+	
+	NOTE: Keeps things all in one place, and when we want to pass 
+		things down, we can just pass down this object.
+	*/
+
+	const formSetters = {
+		personalForm: {
+			setFormData: setPersonalFormData,
+			initialFormData: initialPersonalFormData,
+		},
+		schoolForm: {
+			setFormData: setSchoolFormData,
+			initialFormData: initialSchoolFormData,
+			setItemList: setSchoolList,
+			itemList: schoolList,
+		},
+	};
+
+	/*
+	- Create functions for clearing and loading entire resume with data
+
+	1. First clear resume data, this way we can clear 
+		form data and make it so the user isn't in edit mode anymore.
+	2. Then load in example data
+	*/
 	const loadExampleResume = () => {
+		clearResumeData();
 		setPersonalFormData(exampleResumeData.personalInfo);
 		setSchoolList(exampleResumeData.schoolList);
 	};
 
-	// Clears resume of its user data
+	/*
+	- Clears all user data related to their resume
+	1. Clears all input in their forms.
+	2. Then clears all items they created.
+	3. Set isEdit to false in case they are editing something, and 
+		then they cleared their data. 
+
+	NOTE: Setting isEdit to false prevents a lot of issues with 
+		rendering in Resume.jsx, as it prevents the application
+		from indexing an element that doesn't exist, among other things.
+	*/
 	const clearResumeData = () => {
 		clearFormData("personalForm");
 		clearFormData("schoolForm");
 		setSchoolList([]);
+		setIsEdit(false);
 	};
 
 	const onInputChange = (e, formKey) => {
-		const formSetters = {
-			personalForm: setPersonalFormData,
-			schoolForm: setSchoolFormData,
-		};
 		const { name, value } = e.target;
-		const setFormData = formSetters[formKey];
+		const setFormData = formSetters[formKey].setFormData;
 		setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
 	};
 
-	const clearFormData = (clearFormKey) => {
-		/*
-		- Responsible for reseting the states values that track
-			the input of the forms.
-			
-		- clearFormKey: Key (string) that's related to clearing the 
-			form's data in this function. For example "personalForm" is 
-			the key that's used to clear the personal info form of its data.
-
-		NOTE: Logic for using clearing the form data is put into one 
-			function because it's repetitive, so we choose to 
-			to utilize and pass around one function rather than multiple functions.
-		*/
-		const formSetters = {
-			personalForm: setPersonalFormData,
-			schoolForm: setSchoolFormData,
-		};
-		const formData = {
-			personalForm: initialPersonalFormData,
-			schoolForm: initialSchoolFormData,
-		};
-		const setter = formSetters[clearFormKey];
-		const data = formData[clearFormKey];
-		setter(data);
+	const clearFormData = (formKey) => {
+		const setFormData = formSetters[formKey].setFormData;
+		const initialFormData = formSetters[formKey].initialFormData;
+		setFormData(initialFormData);
 	};
 
-	const submitSchoolForm = (e) => {
+	/*
+	- Deletes a resume item
+	1. Pass in the formKey, indicating the type of item being deleted.
+		Now create a copy of the items array without the item being deleted
+	2. Set that new array as the new state! 
+	NOTE: When you complete deleting an item, isEdit should be false since they are done editing.
+	Rest assured since isEdit is set to false as the closeForm function helping us when deleting.
+	*/
+	const deleteResumeItem = (formKey) => {
+		let newItemArr = [...formSetters[formKey].itemList];
+		let itemSetter = formSetters[formKey].setItemList;
+		newItemArr.splice(editIndex, 1);
+		itemSetter(newItemArr);
+	};
+
+	const submitForm = (e, formKey) => {
 		/*
 		- Submission can be either editing/saving changes to an existing 
-			school, or adding a new school.
-		
+			item or adding a new item
 		1. Construct new school object from form data
-		- If the user is editing a school:
-			1. Replace the schoolObj in 'schoolIndex' with the 
-				newSchoolObj that represents the new changes.
+		- If the user is editing an item:
+			1. Replace the item in 'editIndex' with the 
+				newItemObj that represents the new changes.
 			2. Maintain the visibility attribute by getting a copy of the edited
-				school object from an array.
+				item object from an array.
 			3. Then set isEdit to false, because we're now done 
 				editing.
-
-		- Else the user is adding a new school:
+		- Else the user is adding a new item:
 			1. Set isVisible to true since that's the default when adding	
 			2. Then append the new school object to the end of an array that
-				is a copy of the state array (schoolList).
+				is a copy of the state array (itemList).
 			3. Finally set the state
 		*/
-
-		// Using FormData object, create our newSchoolObj from our form data
 		const formData = new FormData(e.target);
-		let newSchoolObj = {};
+		let newItemObj = {};
 		formData.forEach((value, key) => {
-			newSchoolObj[key] = value;
+			newItemObj[key] = value;
 		});
 
-		let newSchoolList = [...schoolList];
+		let newItemList = [...formSetters[formKey].itemList];
+		const setItemList = formSetters[formKey].setItemList;
+
 		if (isEdit) {
-			newSchoolObj.isVisible = newSchoolList[editIndex].isVisible;
-			newSchoolList[editIndex] = newSchoolObj;
-			setSchoolList(newSchoolList);
+			newItemObj.isVisible = newItemList[editIndex].isVisible;
+			newItemList[editIndex] = newItemObj;
+			setItemList(newItemList);
 			setIsEdit(false);
 		} else {
-			newSchoolObj.isVisible = true;
-			newSchoolList.push(newSchoolObj);
-			setSchoolList(newSchoolList);
+			newItemObj.isVisible = true;
+			newItemList.push(newItemObj);
+			setItemList(newItemList);
 		}
-		clearFormData("schoolForm");
+		clearFormData(formKey);
 	};
 
 	return (
@@ -181,16 +213,15 @@ function App() {
 					loadExampleResume={loadExampleResume}
 					clearResumeData={clearResumeData}
 					clearFormData={clearFormData}
+					formSetters={formSetters}
 					onInputChange={onInputChange}
 					personalFields={personalFields}
 					schoolFields={schoolFields}
-					submitSchoolForm={submitSchoolForm}
-					schoolList={schoolList}
-					setSchoolList={setSchoolList}
-					setSchoolFormData={setSchoolFormData}
+					submitForm={submitForm}
 					setEditIndex={setEditIndex}
 					isEdit={isEdit}
 					setIsEdit={setIsEdit}
+					deleteResumeItem={deleteResumeItem}
 				/>
 				<Resume
 					personalFormData={personalFormData}
