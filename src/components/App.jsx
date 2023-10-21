@@ -36,11 +36,13 @@ personalFormData = {
 
 function App() {
 	/*
-	- Create state object for tracking data from personal info form
-	
-	
+	- Set up Personal form:
+		1. initialPersonFormData: Object, which is a copy of the state
+			but the values are empty strings. Good for reseting form fields.
+		2. personalFormData: State that tracks input of form
+		3. personalFields: Form fields that will be rendered that 
+			also reflect the input values of the state
 	*/
-
 	let initialPersonalFormData = {};
 	personalFormFields.forEach((field) => {
 		initialPersonalFormData[field.name] = "";
@@ -48,58 +50,24 @@ function App() {
 	const [personalFormData, setPersonalFormData] = useState(
 		initialPersonalFormData
 	);
-	// Create form fields for personal info form with state values
 	const personalFields = personalFormFields.map((field) => {
 		field.value = personalFormData[field.name];
 		return field;
 	});
 
 	/*
-	- Create state object for tracking data in education form
-	
-	
-	- schoolFormData: Current data in the education field. 
-		So this could be when the user is editing, adding a new
-		one, etc.
+	- Set up school form and school storage:
+		1. initialSchoolFormData: Object, which is a copy of the state
+			but the values are empty strings. Good for reseting form fields.
+		2. schoolFormData: State that tracks input of form
+		3. schoolFields: Form fields that will be rendered that 
+			also reflect the input values of the state
+		4. schoolList: List to store school objects that the user saved into the application
+		5. editIndex: Boolean to indicate which school object is being edited in schoolList
+		6. isEdit: Boolean that indicates whether the user is editing an existing school object or 
+			adding a new one.
+		*/
 
-	- schoolList: An array (state) that holds all of the schools that 
-		the user has entered for their resume. So this 
-		should be an array of objects. I'm just thinking it should be 
-		a state since we need this data across multiple renders. Like 
-		obviously it could just be a regular array located outside of a component,
-		but since we're using react this is probably better.
-
-	
-	- schoolIndex: When editing they're going to select a school from the list.
-		The index should correspond to the school they selected to be edited.
-		This is so that we can apply changes from schoolFormData into 
-		our schoolList, if the user submits the form. Probably 
-		also needed so that we can target elements for that particular 
-		school, so I'm guessing the other school elements will get 
-		their info from the schoolList state, but the targeted one 
-		will use the stuff from schoolFormData, I'm guessing.
-
-	- isEdit: To indicate whether the user is editing an existing school.
-		A big difference is when the user isn't editing, they 
-		only have the "Cancel" and "Save" buttons. One for closing 
-		and cancelling the form, and the other for submitting and adding 
-		the school to the resume. If 'isEdit' then the "Delete" button
-		should be available, and it'll delete the selected school
-		from schoolList.
-
-
-	NOTE: I have a feeling index and isEdit can apply to also 
-	to professional experience form, but we'll have to make sure only
-	either the education form or the experience form is active. But that's really
-	far ahead.
-
-
-
-
-
-	*/
-
-	// Create state for tracking school form data, then create the fields to be rendered in school form
 	let initialSchoolFormData = {};
 	schoolFormFields.forEach((field) => {
 		initialSchoolFormData[field.name] = "";
@@ -110,14 +78,8 @@ function App() {
 		return field;
 	});
 
-	// Create list to store schools that the user saved into the application
-	// NOTE: Should consist of all data fields from schoolFormData, but also "isVisible: true/false" field
 	const [schoolList, setSchoolList] = useState([]);
-
-	// Create state to track the index of the school that the form is focusing on.
 	const [editIndex, setEditIndex] = useState(0);
-
-	// Create state to track whether the user is editing an existing school or not
 	const [isEdit, setIsEdit] = useState(false);
 
 	// Create functions for clearing and loading entire resume with data
@@ -126,53 +88,69 @@ function App() {
 		setSchoolList(exampleResumeData.schoolList);
 	};
 
-	const clearResume = () => {
-		setPersonalFormData(initialPersonalFormData);
+	// Clears resume of its user data
+	const clearResumeData = () => {
+		clearFormData("personalForm");
+		clearFormData("schoolForm");
+		setSchoolList([]);
 	};
 
-	// Changes state of personalFormData on input change in personal
-	const handlePersonalForm = (e) => {
+	const onInputChange = (e, formKey) => {
+		const formSetters = {
+			personalForm: setPersonalFormData,
+			schoolForm: setSchoolFormData,
+		};
 		const { name, value } = e.target;
-		setPersonalFormData({
-			...personalFormData,
-			[name]: value,
-		});
+		const setFormData = formSetters[formKey];
+		setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
 	};
 
-	// On input change function for school form
-	const handleSchoolForm = (e) => {
-		const { name, value } = e.target;
-		setSchoolFormData({
-			...schoolFormData,
-			[name]: value,
-		});
+	const clearFormData = (clearFormKey) => {
+		/*
+		- Responsible for reseting the states values that track
+			the input of the forms.
+			
+		- clearFormKey: Key (string) that's related to clearing the 
+			form's data in this function. For example "personalForm" is 
+			the key that's used to clear the personal info form of its data.
+
+		NOTE: Logic for using clearing the form data is put into one 
+			function because it's repetitive, so we choose to 
+			to utilize and pass around one function rather than multiple functions.
+		*/
+		const formSetters = {
+			personalForm: setPersonalFormData,
+			schoolForm: setSchoolFormData,
+		};
+		const formData = {
+			personalForm: initialPersonalFormData,
+			schoolForm: initialSchoolFormData,
+		};
+		const setter = formSetters[clearFormKey];
+		const data = formData[clearFormKey];
+		setter(data);
 	};
 
-	const resetSchoolFormData = () => {
-		setSchoolFormData(initialSchoolFormData);
-	};
-
-	/*
-	- Submission can be either editing/saving changes to an existing 
-		school, or adding a new school.
-	
-	1. Construct new school object from form data
-	- If the user is editing a school:
-		1. Replace the schoolObj in 'schoolIndex' with the 
-			newSchoolObj that represents the new changes.
-		2. Maintain the visibility attribute by getting a copy of the edited
-			school object from an array.
-		3. Then set isEdit to false, because we're now done 
-			editing.
-
-	- Else the user is adding a new school:
-		1. Set isVisible to true since that's the default when adding	
-		2. Then append the new school object to the end of an array that
-			is a copy of the state array (schoolList).
-		3. Finally set the state
-	*/
 	const submitSchoolForm = (e) => {
-		e.preventDefault();
+		/*
+		- Submission can be either editing/saving changes to an existing 
+			school, or adding a new school.
+		
+		1. Construct new school object from form data
+		- If the user is editing a school:
+			1. Replace the schoolObj in 'schoolIndex' with the 
+				newSchoolObj that represents the new changes.
+			2. Maintain the visibility attribute by getting a copy of the edited
+				school object from an array.
+			3. Then set isEdit to false, because we're now done 
+				editing.
+
+		- Else the user is adding a new school:
+			1. Set isVisible to true since that's the default when adding	
+			2. Then append the new school object to the end of an array that
+				is a copy of the state array (schoolList).
+			3. Finally set the state
+		*/
 
 		// Using FormData object, create our newSchoolObj from our form data
 		const formData = new FormData(e.target);
@@ -192,11 +170,7 @@ function App() {
 			newSchoolList.push(newSchoolObj);
 			setSchoolList(newSchoolList);
 		}
-
-		// Reset the form using the state
-		resetSchoolFormData();
-
-		// Then deactivate/exit out of form, just hide it
+		clearFormData("schoolForm");
 	};
 
 	return (
@@ -205,13 +179,18 @@ function App() {
 			<main id="app-main">
 				<EditPanel
 					loadExampleResume={loadExampleResume}
-					clearResume={clearResume}
-					handlePersonalForm={handlePersonalForm}
+					clearResumeData={clearResumeData}
+					clearFormData={clearFormData}
+					onInputChange={onInputChange}
 					personalFields={personalFields}
-					handleSchoolForm={handleSchoolForm}
 					schoolFields={schoolFields}
 					submitSchoolForm={submitSchoolForm}
 					schoolList={schoolList}
+					setSchoolList={setSchoolList}
+					setSchoolFormData={setSchoolFormData}
+					setEditIndex={setEditIndex}
+					isEdit={isEdit}
+					setIsEdit={setIsEdit}
 				/>
 				<Resume
 					personalFormData={personalFormData}

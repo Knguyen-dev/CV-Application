@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { ResumeSection, ResumeInfoItem } from "./ResumeSection";
+import { ResumeSection } from "./ResumeSection";
 
 import "../styles/Resume.css";
 

@@ -34,6 +34,7 @@
 .form-btn-container button {
 	font-size: 16px;
 	font-weight: 700;
+	padding: 12px 16px;
 }
 .form-btn-container div {
 	display: flex;
@@ -63,4 +64,10 @@
 .save-btn:hover {
 	background-color: var(--save-btn-clr);
 	color: white;
+}
+
+.btn-hidden {
+	opacity: 0;
+	pointer-events: none;
+	overflow: hidden;
 }
