@@ -15,10 +15,13 @@ BOOK MARK:
 
 function Resume({
 	personalFormData,
-	schoolList,
 	schoolFormData,
+	jobFormData,
+	schoolList,
+	jobList,
 	isEdit,
 	editIndex,
+	activeForm,
 }) {
 	// Personal Form Fields
 	const fullName = personalFormData["full-name"].trim();
@@ -26,50 +29,60 @@ function Resume({
 	const phoneNumber = personalFormData["phone-number"].trim();
 	const address = personalFormData["address"].trim();
 
-	/*
-	- 1. Education Form fields, put inside an object representing a school
-	- 2. formEmpty then discerns whether all of the fields are empty, if so then we won't send this object to be rendered
-	 as a ResumeInfoItem. This is to get the same effect seen in personal-details, as if there's just blank space we won't render
-	any markup so the resume's layout doesn't have empty markup tags.
-	*/
-	const formSchoolObj = {
-		"school-name": schoolFormData["school-name"].trim(),
-		"degree-type": schoolFormData["degree-type"].trim(),
-		"start-date": schoolFormData["start-date"].trim(),
-		"end-date": schoolFormData["end-date"].trim(),
-		address: schoolFormData["address"].trim(),
+	// Create an object of form data and form items
+	const formInfo = {
+		schoolForm: {
+			formData: schoolFormData,
+			itemList: [...schoolList],
+		},
+		jobForm: {
+			formData: jobFormData,
+			itemList: [...jobList],
+		},
 	};
 
-	const formEmpty = Object.values(formSchoolObj).every(
-		(value) => value === ""
-	);
-
-	// Get an array of all of the existing school objects
-	let schoolObjects = [...schoolList];
-
 	/*
-	- If Editing, we want to show real time edits of the existing school object: 
-		1. Copy over the isVisible attribute from the existing 
-		2. Replace the edited object in the schoolObjects list with the object representing
- 			the school in the form. By doing this we make sure that the edits are going to
-			be rendered after every change of the school form.
-	- Else if, they aren't editing but adding a school using the form, and the form isn't empty:
- 		1. Set visibility to true, meaning that schools items are visible by default.
- 		2. Then add the formSchoolObj to the schoolObjects array to be rendered.
- 	- Else: Just means they weren't editing and the form was empty, so we aren't
- 		going to mess with the schoolObjects array or push anything to it unlike the former two paths.
-	*/
+	- If a form is active:
+	1. Get the respective form data state value, and
+		list of existing resume items created by that form
+	
+	2. Load formItemObj with the current values of the active form it's tracking
 
-	if (isEdit) {
-		formSchoolObj.isVisible = schoolObjects[editIndex].isVisible;
-		schoolObjects[editIndex] = formSchoolObj;
-	} else if (!formEmpty) {
-		formSchoolObj.isVisible = true;
-		schoolObjects.push(formSchoolObj);
+	3. Check if the active has empty input or not
+
+	4. Check if the user is currently editing an existing item on the 
+		active form, else they're trying to add a new item to the resume
+	*/
+	if (activeForm) {
+		const formData = formInfo[activeForm].formData;
+
+		let formItemObj = {};
+		for (const key in formData) {
+			// Only trim strings
+			if (typeof formData[key] === "string")
+				formItemObj[key] = formData[key].trim();
+		}
+
+		const isEmptyForm = Object.values(formItemObj).every(
+			(value) => value === ""
+		);
+
+		if (isEdit) {
+			formItemObj.isVisible =
+				formInfo[activeForm].itemList[editIndex].isVisible;
+			formInfo[activeForm].itemList[editIndex] = formItemObj;
+		} else if (!isEmptyForm) {
+			formItemObj.isVisible = true;
+			formInfo[activeForm].itemList.push(formItemObj);
+		}
 	}
 
-	// Ensure school objects only has visible school items
-	schoolObjects = schoolObjects.filter((schoolObj) => schoolObj.isVisible);
+	// Filter item lists so that they only contain visible items
+	for (const key in formInfo) {
+		formInfo[key].itemList = formInfo[key].itemList.filter(
+			(itemObj) => itemObj.isVisible
+		);
+	}
 
 	return (
 		<div className="resume">
@@ -110,11 +123,18 @@ function Resume({
 				</div>
 			</header>
 			<main className="resume-body">
-				{schoolObjects.length != 0 ? (
+				{formInfo["schoolForm"].itemList.length != 0 ? (
 					<ResumeSection
 						sectionTitle="Education"
 						itemType="education"
-						itemDataList={schoolObjects}
+						itemDataList={formInfo["schoolForm"].itemList}
+					/>
+				) : null}
+				{formInfo["jobForm"].itemList.length != 0 ? (
+					<ResumeSection
+						sectionTitle="Education"
+						itemType="job"
+						itemDataList={formInfo["jobForm"].itemList}
 					/>
 				) : null}
 			</main>
@@ -125,9 +145,12 @@ function Resume({
 Resume.propTypes = {
 	personalFormData: PropTypes.object,
 	schoolFormData: PropTypes.object,
+	jobFormData: PropTypes.object,
 	schoolList: PropTypes.array,
+	jobList: PropTypes.array,
 	isEdit: PropTypes.bool,
 	editIndex: PropTypes.number,
+	activeForm: PropTypes.string,
 };
 
 export default Resume;

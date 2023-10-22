@@ -12,40 +12,51 @@ import PropTypes from "prop-types";
 	when either one of the dates are being filled in.
 */
 function ResumeInfoItem({ itemType, itemData }) {
-	return (
-		<div className="resume-info-item">
-			<div className="resume-info-group resume-info-group-minor">
-				{itemData["start-date"] || itemData["end-date"] ? (
-					<p className="start-end-dates">
-						{itemData["start-date"]} - {itemData["end-date"]}
+	const markupMap = {
+		education: (
+			<>
+				<div className="resume-info-group resume-info-group-minor">
+					{itemData["start-date"] || itemData["end-date"] ? (
+						<p className="start-end-dates">
+							{itemData["start-date"]} - {itemData["end-date"]}
+						</p>
+					) : null}
+					<p className="institution-address">{itemData["address"]}</p>
+				</div>
+				<div className="resume-info-group resume-info-group-major">
+					<p className="institution-name">
+						{itemData["school-name"]}
 					</p>
-				) : null}
-				<p className="institution-address">{itemData["address"]}</p>
-			</div>
-			<div className="resume-info-group resume-info-group-major">
-				{itemType === "education" ? (
-					<>
-						<p className="institution-name">
-							{itemData["school-name"]}
+					<p className="degree-type">{itemData["degree-type"]}</p>
+				</div>
+			</>
+		),
+		job: (
+			<>
+				<div className="resume-info-group resume-info-group-minor">
+					{itemData["start-date"] || itemData["end-date"] ? (
+						<p className="start-end-dates">
+							{itemData["start-date"]} - {itemData["end-date"]}
 						</p>
-						<p className="degree-type">{itemData["degree-type"]}</p>
-					</>
-				) : (
-					<>
-						<p className="institution-name">
-							{itemData["company-name"]}
-						</p>
-						<p className="company-position">
-							{itemData["company-position"]}
-						</p>
-						<p className="position-description">
-							{itemData["position-description"]}
-						</p>
-					</>
-				)}
-			</div>
-		</div>
-	);
+					) : null}
+					<p className="institution-address">{itemData["address"]}</p>
+				</div>
+				<div className="resume-info-group resume-info-group-major">
+					<p className="institution-name">
+						{itemData["company-name"]}
+					</p>
+					<p className="position-title">
+						{itemData["position-title"]}
+					</p>
+					<p className="job-description">
+						{itemData["job-description"]}
+					</p>
+				</div>
+			</>
+		),
+	};
+
+	return <div className="resume-info-item">{markupMap[itemType]}</div>;
 }
 ResumeInfoItem.propTypes = {
 	itemType: PropTypes.string,

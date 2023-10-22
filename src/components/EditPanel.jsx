@@ -3,10 +3,9 @@ import ItemFormSection from "./ItemFormSection";
 import { PersonalInfoForm, ItemForm } from "./Forms";
 import CustomButton from "./CustomButton";
 import { SidebarItem } from "./Sidebar";
-
 import PropTypes from "prop-types";
-
 import { useState } from "react";
+import deepCopyArray from "../utilities/deepCopy";
 
 // Section for switching tabs, which affects the content of the form-section
 function EditSideBar({ tabType, onTabChange }) {
@@ -99,22 +98,22 @@ function EditPanel({
 	onInputChange,
 	personalFields,
 	schoolFields,
+	jobFields,
 	submitForm,
 	setEditIndex,
 	isEdit,
 	setIsEdit,
 	deleteResumeItem,
+	activeForm,
+	setActiveForm,
 }) {
 	const [tabType, setTabType] = useState("content");
 
 	const [activeSectionIndex, setActiveSectionIndex] = useState(0);
 
-	const [isActiveForm, setIsActiveForm] = useState({
-		schoolForm: false,
-	});
-
-	// Going to define our item lists here
+	// Going to define our item lists here, make copies to be safe
 	const schoolList = formSetters["schoolForm"].itemList;
+	const jobList = formSetters["jobForm"].itemList;
 
 	const toggleActiveSection = (index) => {
 		/*
@@ -159,10 +158,7 @@ function EditPanel({
 			so if keys do change, the change doesn't have to happen on both sides.
 		*/
 		clearFormData(formKey);
-		setIsActiveForm({
-			...isActiveForm,
-			[formKey]: false,
-		});
+		setActiveForm("");
 		setIsEdit(false);
 	};
 
@@ -183,7 +179,6 @@ function EditPanel({
 	const sectionArr = [
 		{
 			sectionTitle: "Education",
-
 			itemSidebar: (
 				<ul className="sidebar-list">
 					{schoolList.map((schoolObj, index) => {
@@ -193,10 +188,7 @@ function EditPanel({
 								itemName={schoolObj["school-name"]}
 								isVisible={schoolObj["isVisible"]}
 								onItemClick={() => {
-									setIsActiveForm({
-										...isActiveForm,
-										schoolForm: true,
-									});
+									setActiveForm("schoolForm");
 									setEditIndex(index);
 									formSetters["schoolForm"].setFormData(
 										schoolList[index]
@@ -218,7 +210,7 @@ function EditPanel({
 			),
 			itemForm: (
 				<ItemForm
-					formID="education-form"
+					formID="school-form"
 					onInputChange={(e) => onInputChange(e, "schoolForm")}
 					deleteItem={() => deleteResumeItem("schoolForm")}
 					closeForm={() => closeForm("schoolForm")}
@@ -227,10 +219,55 @@ function EditPanel({
 					isEdit={isEdit}
 				/>
 			),
-			isActiveForm: isActiveForm.schoolForm,
+			isActiveForm: activeForm === "schoolForm",
 			showFormBtnText: "Add School",
-			showForm: () =>
-				setIsActiveForm({ ...isActiveForm, schoolForm: true }),
+			showForm: () => setActiveForm("schoolForm"),
+		},
+		{
+			sectionTitle: "Experiences",
+			itemSidebar: (
+				<ul className="sidebar-list">
+					{jobList.map((jobObj, index) => {
+						return (
+							<SidebarItem
+								key={index}
+								itemName={jobObj["company-name"]}
+								isVisible={jobObj["isVisible"]}
+								onItemClick={() => {
+									setActiveForm("jobForm");
+									setEditIndex(index);
+									formSetters["jobForm"].setFormData(
+										jobList[index]
+									);
+									setIsEdit(true);
+								}}
+								toggleVisibility={() => {
+									toggleItemVisibility(
+										jobObj,
+										index,
+										jobList,
+										formSetters["jobForm"].setItemList
+									);
+								}}
+							/>
+						);
+					})}
+				</ul>
+			),
+			itemForm: (
+				<ItemForm
+					formID="job-form"
+					onInputChange={(e) => onInputChange(e, "jobForm")}
+					deleteItem={() => deleteResumeItem("jobForm")}
+					closeForm={() => closeForm("jobForm")}
+					formFields={jobFields}
+					submitForm={(e) => submitForm(e, "jobForm")}
+					isEdit={isEdit}
+				/>
+			),
+			isActiveForm: activeForm === "jobForm",
+			showFormBtnText: "Add Job",
+			showForm: () => setActiveForm("jobForm"),
 		},
 	];
 
@@ -296,12 +333,15 @@ EditPanel.propTypes = {
 	formSetters: PropTypes.object,
 	personalFields: PropTypes.array,
 	schoolFields: PropTypes.array,
+	jobFields: PropTypes.array,
 	submitForm: PropTypes.func,
 	editIndex: PropTypes.number,
 	setEditIndex: PropTypes.func,
 	isEdit: PropTypes.bool,
 	setIsEdit: PropTypes.func,
 	deleteResumeItem: PropTypes.func,
+	activeForm: PropTypes.string,
+	setActiveForm: PropTypes.func,
 };
 
 export default EditPanel;

@@ -1,38 +1,19 @@
+"use strict";
 import "../styles/App.css";
 
 import {
-	schoolFormFields,
 	exampleResumeData,
 	personalFormFields,
+	schoolFormFields,
+	jobFormFields,
 } from "./formData";
+import deepCopyArray from "../utilities/deepCopy";
+
 import EditPanel from "./EditPanel";
 import Resume from "./Resume";
 import Header from "./Header";
 import Footer from "./Footer";
 import { useState } from "react";
-
-/*
-+ App: Main application component
-
-- States:
-1. personalFormData: Object that represents the current values of the personal info form.
-    Keys are "name" attributes of the inputs, which can be seen from formData.js
-
-personalFormData = {
-	input_name_1: input value,
-	input_name_2: another input value,
-}
-
-
-- Variables:
-1. initialPersonalFormData: Initial object used to iteratively create the object 
-    that tracks the values of the personal info form.
-2. personalFields: Object, which is a copy of personalFormFields, but the 
-    the value of each field is gotten from the state. As a result 
-    each field object will have the current value of the form.
-
-
-*/
 
 function App() {
 	/*
@@ -56,16 +37,13 @@ function App() {
 	});
 
 	/*
-	- Set up school form and school storage:
+	- Set up school form and array state to store those items:
 	1. initialSchoolFormData: Object, which is a copy of the state
 		but the values are empty strings. Good for reseting form fields.
 	2. schoolFormData: State that tracks input of form
 	3. schoolFields: Form fields that will be rendered that 
 		also reflect the input values of the state
 	4. schoolList: List to store school objects that the user saved into the application
-	5. editIndex: Boolean to indicate which school object is being edited in schoolList
-	6. isEdit: Boolean that indicates whether the user is editing an existing school object or 
-		adding a new one.
 	*/
 	let initialSchoolFormData = {};
 	schoolFormFields.forEach((field) => {
@@ -76,25 +54,47 @@ function App() {
 		field.value = schoolFormData[field.name];
 		return field;
 	});
-
 	const [schoolList, setSchoolList] = useState([]);
+
+	/*
+	- Set up professional experiences form and array state to store those items
+	*/
+	let initialJobFormData = {};
+	jobFormFields.forEach((field) => {
+		initialJobFormData[field.name] = "";
+	});
+	const [jobFormData, setJobFormData] = useState(initialJobFormData);
+	const jobFields = jobFormFields.map((field) => {
+		field.value = jobFormData[field.name];
+		return field;
+	});
+	const [jobList, setJobList] = useState([]);
 
 	/*
 	- Set up variables to track when the user is editing and 
 		the index of the item that they're editing.
+	1. editIndex: Boolean to indicate which school object is being edited in schoolList
+	2. isEdit: Boolean that indicates whether the user is editing an existing school object or 
+		adding a new one.
 	*/
 	const [editIndex, setEditIndex] = useState(0);
 	const [isEdit, setIsEdit] = useState(false);
 
 	/*
-	- Set up a map that has all of the setters we want and related info that helps 
-		their functionality.
-	
-	NOTE: Keeps things all in one place, and when we want to pass 
-		things down, we can just pass down this object.
+	- Set up state to track which of the item forms the user currently has open.
+		State's values should be one of the form keys belonging to the 
+		Item forms. Such as "schoolForm" or "jobForm" as these 
+		are defined in formSetters.
 	*/
+	const [activeForm, setActiveForm] = useState("");
 
 	const formSetters = {
+		/*
+		- Set up a map that has all of the setters we want and related info that helps 
+			their functionality.
+		NOTE: Keeps things all in one place, and when we want to pass 
+			things down, we can just pass down this object.
+		*/
 		personalForm: {
 			setFormData: setPersonalFormData,
 			initialFormData: initialPersonalFormData,
@@ -105,36 +105,44 @@ function App() {
 			setItemList: setSchoolList,
 			itemList: schoolList,
 		},
+		jobForm: {
+			setFormData: setJobFormData,
+			initialFormData: initialJobFormData,
+			setItemList: setJobList,
+			itemList: jobList,
+		},
 	};
 
-	/*
-	- Create functions for clearing and loading entire resume with data
-
-	1. First clear resume data, this way we can clear 
-		form data and make it so the user isn't in edit mode anymore.
-	2. Then load in example data
-	*/
 	const loadExampleResume = () => {
+		/*
+		- Create functions for clearing and loading entire resume with data
+		1. First clear resume data, this way we can clear 
+			form data and make it so the user isn't in edit mode anymore.
+		2. Then load in example data
+		*/
 		clearResumeData();
 		setPersonalFormData(exampleResumeData.personalInfo);
 		setSchoolList(exampleResumeData.schoolList);
+		setJobList(exampleResumeData.jobList);
 	};
 
-	/*
-	- Clears all user data related to their resume
-	1. Clears all input in their forms.
-	2. Then clears all items they created.
-	3. Set isEdit to false in case they are editing something, and 
-		then they cleared their data. 
-
-	NOTE: Setting isEdit to false prevents a lot of issues with 
-		rendering in Resume.jsx, as it prevents the application
-		from indexing an element that doesn't exist, among other things.
-	*/
 	const clearResumeData = () => {
+		/*
+		- Clears all user data related to their resume
+		1. Clears all input in their forms.
+		2. Then clears all items they created.
+		3. Set isEdit to false in case they are editing something, and 
+			then they cleared their data. 
+
+		NOTE: Setting isEdit to false prevents a lot of issues with 
+			rendering in Resume.jsx, as it prevents the application
+			from indexing an element that doesn't exist, among other things.
+		*/
 		clearFormData("personalForm");
 		clearFormData("schoolForm");
+		clearFormData("jobForm");
 		setSchoolList([]);
+		setJobList([]);
 		setIsEdit(false);
 	};
 
@@ -150,15 +158,15 @@ function App() {
 		setFormData(initialFormData);
 	};
 
-	/*
-	- Deletes a resume item
-	1. Pass in the formKey, indicating the type of item being deleted.
-		Now create a copy of the items array without the item being deleted
-	2. Set that new array as the new state! 
-	NOTE: When you complete deleting an item, isEdit should be false since they are done editing.
-	Rest assured since isEdit is set to false as the closeForm function helping us when deleting.
-	*/
 	const deleteResumeItem = (formKey) => {
+		/*
+		- Deletes a resume item
+		1. Pass in the formKey, indicating the type of item being deleted.
+			Now create a copy of the items array without the item being deleted
+		2. Set that new array as the new state! 
+		NOTE: When you complete deleting an item, isEdit should be false since they are done editing.
+		Rest assured since isEdit is set to false as the closeForm function helping us when deleting.
+		*/
 		let newItemArr = [...formSetters[formKey].itemList];
 		let itemSetter = formSetters[formKey].setItemList;
 		newItemArr.splice(editIndex, 1);
@@ -169,7 +177,7 @@ function App() {
 		/*
 		- Submission can be either editing/saving changes to an existing 
 			item or adding a new item
-		1. Construct new school object from form data
+		1. Construct new item object from form data
 		- If the user is editing an item:
 			1. Replace the item in 'editIndex' with the 
 				newItemObj that represents the new changes.
@@ -179,9 +187,15 @@ function App() {
 				editing.
 		- Else the user is adding a new item:
 			1. Set isVisible to true since that's the default when adding	
-			2. Then append the new school object to the end of an array that
+			2. Then append the new item object to the end of an array that
 				is a copy of the state array (itemList).
 			3. Finally set the state
+
+		NOTE: Notice how we set the a form data state, and in the object we have 'isVisible'.
+			So keep in mind that the values for the states that track the 
+			item forms will likely have isVisible attribute to them.
+			This doesn't matter when creating form fields, but it 
+			does matter in the resume section as we only trim strings 
 		*/
 		const formData = new FormData(e.target);
 		let newItemObj = {};
@@ -217,18 +231,24 @@ function App() {
 					onInputChange={onInputChange}
 					personalFields={personalFields}
 					schoolFields={schoolFields}
+					jobFields={jobFields}
 					submitForm={submitForm}
 					setEditIndex={setEditIndex}
 					isEdit={isEdit}
 					setIsEdit={setIsEdit}
 					deleteResumeItem={deleteResumeItem}
+					activeForm={activeForm}
+					setActiveForm={setActiveForm}
 				/>
 				<Resume
 					personalFormData={personalFormData}
-					schoolList={schoolList}
 					schoolFormData={schoolFormData}
+					jobFormData={jobFormData}
+					schoolList={schoolList}
+					jobList={jobList}
 					isEdit={isEdit}
 					editIndex={editIndex}
+					activeForm={activeForm}
 				/>
 			</main>
 			<Footer />
