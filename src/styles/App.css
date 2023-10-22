@@ -8,7 +8,7 @@
 
 #app-header,
 #app-footer {
-	background-color: var(--clr-emerald);
+	background-color: var(--save-btn-clr);
 	padding: 8px;
 	text-align: center;
 }

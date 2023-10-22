@@ -3,6 +3,8 @@ import ItemFormSection from "./ItemFormSection";
 import { PersonalInfoForm, ItemForm } from "./Forms";
 import CustomButton from "./CustomButton";
 import { SidebarItem } from "./Sidebar";
+import { EditFont } from "./EditFont";
+
 import saveAsImage from "../utilities/saveAsImage";
 
 import PropTypes from "prop-types";
@@ -101,6 +103,8 @@ function EditPanel({
 
 	const [activeSectionIndex, setActiveSectionIndex] = useState(0);
 
+	const [fontClass, setFontClass] = useState("arial-font");
+
 	// Going to define our item lists here, make copies to be safe
 	const schoolList = formSetters["schoolForm"].itemList;
 	const jobList = formSetters["jobForm"].itemList;
@@ -167,7 +171,7 @@ function EditPanel({
 		setItemList([...itemList]);
 	};
 
-	// Mark up for each item form section
+	// Mark up for each item form section, all belong in "content tab"
 	const sectionArr = [
 		{
 			sectionTitle: "Education",
@@ -297,7 +301,7 @@ function EditPanel({
 		),
 		customize: (
 			<>
-				<p>Sample customization content</p>
+				<EditFont fontClass={fontClass} setFontClass={setFontClass} />
 			</>
 		),
 	};
@@ -307,7 +311,10 @@ function EditPanel({
 			<EditSideBar tabType={tabType} onTabChange={setTabType} />
 			<div className="form-section">
 				<ResumeActions
-					loadExampleResume={loadExampleResume}
+					loadExampleResume={() => {
+						loadExampleResume();
+						setFontClass("arial-font");
+					}}
 					downloadResume={saveAsImage}
 					clearResume={clearResumeData}
 				/>

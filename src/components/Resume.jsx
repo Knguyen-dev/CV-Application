@@ -18,15 +18,16 @@ function Resume({
 	const phoneNumber = personalFormData["phone-number"].trim();
 	const address = personalFormData["address"].trim();
 
-	// Create an object of form data and form items
+	// Create an object of form data and form items and copies of the array so that
+	// we don't accidentally mess with the original state arrays.
 	const formInfo = {
 		schoolForm: {
 			formData: schoolFormData,
-			itemList: schoolList,
+			itemList: [...schoolList],
 		},
 		jobForm: {
 			formData: jobFormData,
-			itemList: jobList,
+			itemList: [...jobList],
 		},
 	};
 
@@ -95,7 +96,7 @@ function Resume({
 	}
 
 	return (
-		<div id="resume" className="resume">
+		<div id="resume" className="">
 			<header className="personal-details">
 				{fullName ? (
 					<h1 className="resume-name" id="full-name-el">

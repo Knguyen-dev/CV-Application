@@ -1,4 +1,4 @@
-.resume {
+#resume {
 	flex: 1 1 60%;
 	display: grid;
 	grid-template-rows: auto 1fr;
@@ -49,7 +49,7 @@
 }
 
 .resume-section {
-	width: 80%;
+	width: 85%;
 	margin: 0 auto;
 }
 
@@ -62,9 +62,10 @@
 	color: var(--clr-dark-indigo);
 	padding: 4px 0;
 }
-.resume .institution-name {
+#resume .institution-name {
 	font-weight: 700;
 }
+
 .resume-info-list {
 	display: flex;
 	flex-direction: column;
