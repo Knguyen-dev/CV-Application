@@ -78,7 +78,7 @@ const exampleResumeData = {
 			address: "1029 S Cookie Corner",
 			isVisible: true,
 			"job-description":
-				"Oversaw and managed various cybersecurity practices related to protecting data. Also handled baking cookies on the weekend for hte company as well.",
+				"Oversaw and managed various cybersecurity practices related to protecting data. Also handled baking cookies on the weekend for the company as well.",
 		},
 	],
 };

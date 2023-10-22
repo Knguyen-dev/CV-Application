@@ -3,6 +3,8 @@ import ItemFormSection from "./ItemFormSection";
 import { PersonalInfoForm, ItemForm } from "./Forms";
 import CustomButton from "./CustomButton";
 import { SidebarItem } from "./Sidebar";
+import saveAsImage from "../utilities/saveAsImage";
+
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -40,7 +42,7 @@ EditSideBar.propTypes = {
 };
 
 // For critical resume interactions that involve the entire resume
-function ResumeActions({ loadExampleResume, clearResume }) {
+function ResumeActions({ loadExampleResume, downloadResume, clearResume }) {
 	return (
 		<div className="resume-actions edit-section">
 			<header className="edit-section-header">
@@ -58,6 +60,7 @@ function ResumeActions({ loadExampleResume, clearResume }) {
 						btnText="Download"
 						classList={["download-resume-btn", "button-shrink"]}
 						iconKeyword="download"
+						onClick={downloadResume}
 					/>
 
 					<CustomButton
@@ -73,21 +76,9 @@ function ResumeActions({ loadExampleResume, clearResume }) {
 }
 ResumeActions.propTypes = {
 	loadExampleResume: PropTypes.func,
+	downloadResume: PropTypes.func,
 	clearResume: PropTypes.func,
 };
-
-/*
-+ tabType: "content" or "customize"
-- If we're on the content tab, we show forms for personal info, education, and profession.
-- Else if we're on the customize tab, we show the diferent sections 
-	for customizing such as layout, color, and fonts, or whatever 
-	sections we want to have for customization
-
-+ isOpen: Our state, which'll be a map that keeps track whether 
-	our forms are open or not. This helps persist the states of the forms
-	even when the user switches tabs in the application.
-
-*/
 
 function EditPanel({
 	loadExampleResume,
@@ -114,22 +105,22 @@ function EditPanel({
 	const schoolList = formSetters["schoolForm"].itemList;
 	const jobList = formSetters["jobForm"].itemList;
 
+	/*
+	+ toggleActionSection: Function for choosing which of the 
+		collapsible ItemFormSections is active or opened. There
+		are two cases that can happen:
+
+	1. activeSectionIndex === index: This means the user is clicking
+		the open/close button on a section that's already open. In this
+		case we want to close the section, so we set our index to -1, which 
+		will mean on next render, no sections will be open
+
+	2. Else, the index of the section we're trying to open is different 
+		from the one that's currently opened, so we set the new index. Then
+		on next render the new 'activeSectionIndex' will be the only one that's 
+		opened while all others are closed.
+	*/
 	const toggleActiveSection = (index) => {
-		/*
-		+ toggleActionSection: Function for choosing which of the 
-			collapsible ItemFormSections is active or opened. There
-			are two cases that can happen:
-
-		1. activeSectionIndex === index: This means the user is clicking
-			the open/close button on a section that's already open. In this
-			case we want to close the section, so we set our index to -1, which 
-			will mean on next render, no sections will be open
-
-		2. Else, the index of the section we're trying to open is different 
-			from the one that's currently opened, so we set the new index. Then
-			on next render the new 'activeSectionIndex' will be the only one that's 
-			opened while all others are closed.
-		*/
 		if (activeSectionIndex === index) {
 			setActiveSectionIndex(-1);
 		} else {
@@ -137,25 +128,25 @@ function EditPanel({
 		}
 	};
 
+	/*
+	- Function for canceling or closing out of a form. This closes 
+		the form and eliminates the input that was in the form 
+	
+	1. clearFormKey: Key used for clearing the target form's data
+	2. closeFormKey: Key used for deactivating the target form
+	3. isEdit: Boolean indicating whether the user is editing an existing item on the form, rather
+		than entering in new information for adding an item. Set isEdit to false
+		because if they were editing, closing the form gets them out of editing.
+		This allows us to correctly track when the user is editing.
+	
+	NOTE: Properly closing a form means using the correct
+		keys for clearing its data and deactivating it. Keep in 
+		mind the keys for 'isActiveForm' and the keys
+		for the objects in clearFormData. While it's important to 
+		stay consistent with the keys, having two parameters makes it 
+		so if keys do change, the change doesn't have to happen on both sides.
+	*/
 	const closeForm = (formKey) => {
-		/*
-		- Function for canceling or closing out of a form. This closes 
-			the form and eliminates the input that was in the form 
-		
-		1. clearFormKey: Key used for clearing the target form's data
-		2. closeFormKey: Key used for deactivating the target form
-		3. isEdit: Boolean indicating whether the user is editing an existing item on the form, rather
-			than entering in new information for adding an item. Set isEdit to false
-			because if they were editing, closing the form gets them out of editing.
-			This allows us to correctly track when the user is editing.
-		
-		NOTE: Properly closing a form means using the correct
-			keys for clearing its data and deactivating it. Keep in 
-			mind the keys for 'isActiveForm' and the keys
-			for the objects in clearFormData. While it's important to 
-			stay consistent with the keys, having two parameters makes it 
-			so if keys do change, the change doesn't have to happen on both sides.
-		*/
 		clearFormData(formKey);
 		setActiveForm("");
 		setIsEdit(false);
@@ -317,6 +308,7 @@ function EditPanel({
 			<div className="form-section">
 				<ResumeActions
 					loadExampleResume={loadExampleResume}
+					downloadResume={saveAsImage}
 					clearResume={clearResumeData}
 				/>
 				{tabContent[tabType]}

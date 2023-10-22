@@ -95,7 +95,7 @@ function Resume({
 	}
 
 	return (
-		<div className="resume">
+		<div id="resume" className="resume">
 			<header className="personal-details">
 				{fullName ? (
 					<h1 className="resume-name" id="full-name-el">
