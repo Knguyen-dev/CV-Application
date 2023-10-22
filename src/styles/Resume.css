@@ -1,45 +1,55 @@
 .resume {
-	max-width: 100%;
-	flex: 1 1 auto;
+	flex: 1 1 60%;
 	display: grid;
 	grid-template-rows: auto 1fr;
 	box-shadow: var(--box-shadow);
+
+	/*
+	- Now resume can't shrink below 400px which is good since 
+		anything lower than that makes the resume just look bad.
+	*/
+	min-width: 400px;
 }
 
 /* Styling resume header */
 .personal-details {
-	padding: 32px 16px;
+	padding: 2em 1em;
 	background-color: var(--clr-dark-indigo);
 	color: white;
 	display: flex;
 	flex-direction: column;
 	text-align: center;
-	row-gap: 12px;
+	row-gap: 1.25em;
 }
 .resume-name {
-	font-size: 32px;
+	font-size: 2em;
 }
+
 .resume-contact-info {
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: center;
+	gap: 18px;
+	flex-wrap: wrap;
 }
+
 .contact-section {
 	display: flex;
 	align-items: center;
-	column-gap: 8px;
+	column-gap: 0.5em;
 }
 
 /* Styling resume body */
 .resume-body {
 	display: flex;
 	flex-direction: column;
-	padding: 16px 0;
+	padding: 1em 0;
 	background-color: var(--edit-section-clr);
+	padding-top: 2em;
+	row-gap: 2em;
 }
 
 .resume-section {
-	border: 2px solid black;
-	width: 90%;
+	width: 80%;
 	margin: 0 auto;
 }
 
@@ -77,6 +87,7 @@
 
 .resume-info-group-minor {
 	flex: 0 0 25%;
+	min-width: 25%;
 }
 
 .resume-info-group-major {

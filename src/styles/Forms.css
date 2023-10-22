@@ -27,9 +27,10 @@
 }
 
 .form-btn-container {
-	margin-top: 16px;
+	margin-top: 1em;
 	display: flex;
 	justify-content: space-between;
+	column-gap: 1.5em;
 }
 .form-btn-container button {
 	font-size: 16px;
@@ -70,4 +71,30 @@
 	opacity: 0;
 	pointer-events: none;
 	overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+	/*
+	- Makes the buttons on the form more responsive for smaller screens.
+	*/
+	.form-btn-container,
+	.form-btn-container div {
+		flex-direction: column-reverse;
+		row-gap: 0.5em;
+	}
+	.form-btn-container button {
+		justify-content: center;
+	}
+
+	/* 
+	- Before when our delete button had btn-hidden we 
+	made it invisible since we wanted the blank space for layout purposes. However once we're 
+	at 600px or lower, we make it so btn-hidden just removes 
+	the delete button from the layout. As a result our layout 
+	just looks better since it doesn't have extra blank space.
+	
+	*/
+	.form-btn-container .btn-hidden {
+		display: none;
+	}
 }

@@ -6,7 +6,7 @@ import {
 	personalFormFields,
 	schoolFormFields,
 	jobFormFields,
-} from "./formData";
+} from "../utilities/formData";
 import deepCopyArray from "../utilities/deepCopy";
 
 import EditPanel from "./EditPanel";
@@ -118,12 +118,14 @@ function App() {
 		- Create functions for clearing and loading entire resume with data
 		1. First clear resume data, this way we can clear 
 			form data and make it so the user isn't in edit mode anymore.
-		2. Then load in example data
+		2. Then load in example data. We load in the arrays as 
+			deep copies because we don't want the application 
+			messing with the original data we provided from formData.js
 		*/
 		clearResumeData();
 		setPersonalFormData(exampleResumeData.personalInfo);
-		setSchoolList(exampleResumeData.schoolList);
-		setJobList(exampleResumeData.jobList);
+		setSchoolList(deepCopyArray(exampleResumeData.schoolList));
+		setJobList(deepCopyArray(exampleResumeData.jobList));
 	};
 
 	const clearResumeData = () => {

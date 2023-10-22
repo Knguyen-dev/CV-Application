@@ -5,7 +5,6 @@ import CustomButton from "./CustomButton";
 import { SidebarItem } from "./Sidebar";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import deepCopyArray from "../utilities/deepCopy";
 
 // Section for switching tabs, which affects the content of the form-section
 function EditSideBar({ tabType, onTabChange }) {
@@ -162,17 +161,19 @@ function EditPanel({
 		setIsEdit(false);
 	};
 
-	// Toggles an item's visibility
-	const toggleItemVisibility = (
-		itemObj,
-		itemIndex,
-		itemList,
-		setItemList
-	) => {
-		itemObj.isVisible = !itemList[itemIndex].isVisible;
-		let newItemList = [...itemList];
-		newItemList[itemIndex] = itemObj;
-		setItemList(newItemList);
+	/*
+	- Toggles an item's visibility.
+	1. itemObj is actually an element in itemList, and 
+		javascript handles objects as references. Objects 
+		and arrays are non-primitive, meaning when passed to 
+		functions they are references, whilst strings and numbers 
+		are passed via value. Just a good thing to remember.
+	NOTE: For visibility to work properly, you have to remember
+		to set the state to a new array.
+	*/
+	const toggleItemVisibility = (itemObj, itemList, setItemList) => {
+		itemObj.isVisible = !itemObj.isVisible;
+		setItemList([...itemList]);
 	};
 
 	// Mark up for each item form section
@@ -198,7 +199,6 @@ function EditPanel({
 								toggleVisibility={() => {
 									toggleItemVisibility(
 										schoolObj,
-										index,
 										schoolList,
 										formSetters["schoolForm"].setItemList
 									);
@@ -244,7 +244,6 @@ function EditPanel({
 								toggleVisibility={() => {
 									toggleItemVisibility(
 										jobObj,
-										index,
 										jobList,
 										formSetters["jobForm"].setItemList
 									);

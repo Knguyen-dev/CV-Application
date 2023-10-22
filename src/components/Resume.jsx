@@ -1,17 +1,6 @@
 import PropTypes from "prop-types";
 import { ResumeSection } from "./ResumeSection";
-
 import "../styles/Resume.css";
-
-/*
-.trim(): Using .trim() so that the application doesn't render any new elements 
-	on the resume when the user just puts in spaces.
-
-BOOK MARK: 
-	1. Now need to focus on logic for adding new schools
-	2. Then focus on editing logic. Also make sure to 
-	take inspiration from or transfer logic from earlier
-*/
 
 function Resume({
 	personalFormData,
@@ -33,11 +22,11 @@ function Resume({
 	const formInfo = {
 		schoolForm: {
 			formData: schoolFormData,
-			itemList: [...schoolList],
+			itemList: schoolList,
 		},
 		jobForm: {
 			formData: jobFormData,
-			itemList: [...jobList],
+			itemList: jobList,
 		},
 	};
 
@@ -52,6 +41,27 @@ function Resume({
 
 	4. Check if the user is currently editing an existing item on the 
 		active form, else they're trying to add a new item to the resume
+
+	NOTE: 
+		- The main point of this is formItemObj, which will be 
+		the thing we use to render the user's edits on the 
+		form in real time! This object takes in state data, and 
+		each change in input will change the state, which is 
+		how we're able to do real-time rendering.
+
+		- We use activeForm to know which item they 
+		are adding in. So if they're on the education form, we 
+		know to render the resume as if they're adding 
+		a new school. If activeForm doesn't equal anything, we 
+		don't have to worry about rendering their edits with 
+		formItemObj because they currently don't havea form open.
+
+
+		- Using isEdit, we know whether or not 
+		they're editing an existing object, and what item 
+		they're editing. 
+		- .trim(): Using .trim() so that the application doesn't render any new elements 
+		on the resume when the user just puts in spaces.
 	*/
 	if (activeForm) {
 		const formData = formInfo[activeForm].formData;
