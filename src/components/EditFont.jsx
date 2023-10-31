@@ -1,14 +1,11 @@
 import "../styles/EditFont.css";
 import PropTypes from "prop-types";
-
 /*
-
 - EditFont: This component is responsible for 
 	changing the font on the resume div. Basically the idea 
 	is each btn has the ability to change a state, and the 
 	state represents a css class. Then we put set that 
 	state's value as the resume div's class. 
-
 - In this case we defined the font classes in index.css 
 	and then we used them here. For this component 
 	we lifted the state up to the parent because this 

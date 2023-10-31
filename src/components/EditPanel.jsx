@@ -10,7 +10,11 @@ import saveAsImage from "../utilities/saveAsImage";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-// Section for switching tabs, which affects the content of the form-section
+/*
+- Section for switching tabs, which affects the content of the form-section
+
+
+*/
 function EditSideBar({ tabType, onTabChange }) {
 	const btnClassList = ["sidebar-btn", "button-shrink", "active-btn"];
 	return (
@@ -82,6 +86,10 @@ ResumeActions.propTypes = {
 	clearResume: PropTypes.func,
 };
 
+/*
+- Component responsible for creating and handling the forms and 
+	all of their functionalities.
+*/
 function EditPanel({
 	loadExampleResume,
 	clearResumeData,
@@ -99,13 +107,21 @@ function EditPanel({
 	activeForm,
 	setActiveForm,
 }) {
+	/*
+	1. tabType: State that tracks which tab the user is on, either 'content' or 'customize'
+	2. activeSectionIndex: State that tracks the collapsible section that the user has open
+	3. fontClass: State that tracks the css class that should be added onto the resume div, which in turn will change the font of the resume
+	*/
 	const [tabType, setTabType] = useState("content");
-
 	const [activeSectionIndex, setActiveSectionIndex] = useState(0);
-
 	const [fontClass, setFontClass] = useState("arial-font");
 
-	// Going to define our item lists here, make copies to be safe
+	/*
+	- Getting our item lists
+	- Going to define our item lists here, these don't need to be copies since 
+	 we aren't going to mutate or change these lists. These should only be used for creating the sidebars
+	 for displaying the items.
+	*/
 	const schoolList = formSetters["schoolForm"].itemList;
 	const jobList = formSetters["jobForm"].itemList;
 
@@ -135,20 +151,9 @@ function EditPanel({
 	/*
 	- Function for canceling or closing out of a form. This closes 
 		the form and eliminates the input that was in the form 
-	
-	1. clearFormKey: Key used for clearing the target form's data
-	2. closeFormKey: Key used for deactivating the target form
-	3. isEdit: Boolean indicating whether the user is editing an existing item on the form, rather
-		than entering in new information for adding an item. Set isEdit to false
-		because if they were editing, closing the form gets them out of editing.
-		This allows us to correctly track when the user is editing.
-	
-	NOTE: Properly closing a form means using the correct
-		keys for clearing its data and deactivating it. Keep in 
-		mind the keys for 'isActiveForm' and the keys
-		for the objects in clearFormData. While it's important to 
-		stay consistent with the keys, having two parameters makes it 
-		so if keys do change, the change doesn't have to happen on both sides.
+	1. formKey: Key used for identifying a form. Again these 
+		are defined in formSetters because each key will make us
+		use different functions for different forms.
 	*/
 	const closeForm = (formKey) => {
 		clearFormData(formKey);
@@ -173,6 +178,15 @@ function EditPanel({
 
 	// Mark up for each item form section, all belong in "content tab"
 	const sectionArr = [
+		/*
+		- How to create a section for an item form
+		1. Create a title for the section
+		2. Create itemSidebar, which is the sidebar showing the items created using said form
+			Here we'll render the markup for all of the associated SidebarItems.
+			- Set their visibility
+			- Set the functionality for editing an item on click
+			- Set functionality for toggling its visibility
+		*/
 		{
 			sectionTitle: "Education",
 			itemSidebar: (
@@ -203,6 +217,16 @@ function EditPanel({
 					})}
 				</ul>
 			),
+			/*
+			3. Create the form itself. 
+				- We give a function for changing the input, which will affect a state in real time
+				- Give function for deleting an associated item on the resume.
+				- Set functionality for closing and submitting the form
+				- Give object for creating the form fields and give a boolean to see
+					when a user is editing the form.
+				- Finally, add a function for showing the form or setting it as the active form so 
+					we know what form the user is adding or deleting from.
+			*/
 			itemForm: (
 				<ItemForm
 					formID="school-form"

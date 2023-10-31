@@ -57,7 +57,13 @@ function App() {
 	const [schoolList, setSchoolList] = useState([]);
 
 	/*
-	- Set up professional experiences form and array state to store those items
+	- Set up professional experiences form
+	1. initialJobFormData: Object, which is a copy of the jobFormData, 
+		but the values are empty strings, so that we can reset the values for the form fields
+	2. jobFormData: State that tracks input of job fomr
+	3. jobFields: Form fields for the job form 
+	4. jobList: List to store job objects that the user saved into the application using 
+		the job form.
 	*/
 	let initialJobFormData = {};
 	jobFormFields.forEach((field) => {
@@ -71,29 +77,24 @@ function App() {
 	const [jobList, setJobList] = useState([]);
 
 	/*
-	- Set up variables to track when the user is editing and 
-		the index of the item that they're editing.
 	1. editIndex: Boolean to indicate which school object is being edited in schoolList
 	2. isEdit: Boolean that indicates whether the user is editing an existing school object or 
 		adding a new one.
+	3. activeForm: State to track which of the item forms the user currently has open.
+		State's values should be one of the form keys belonging to the 
+		Item forms. 
+		
+	- NOTE: The strings or 'formKeys' used to indicate the 
+		form being talked about are defined as keys in formSetters.
 	*/
 	const [editIndex, setEditIndex] = useState(0);
 	const [isEdit, setIsEdit] = useState(false);
-
-	/*
-	- Set up state to track which of the item forms the user currently has open.
-		State's values should be one of the form keys belonging to the 
-		Item forms. Such as "schoolForm" or "jobForm" as these 
-		are defined in formSetters.
-	*/
 	const [activeForm, setActiveForm] = useState("");
 
 	const formSetters = {
 		/*
 		- Set up a map that has all of the setters we want and related info that helps 
 			their functionality.
-		NOTE: Keeps things all in one place, and when we want to pass 
-			things down, we can just pass down this object.
 		*/
 		personalForm: {
 			setFormData: setPersonalFormData,

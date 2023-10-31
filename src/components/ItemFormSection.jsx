@@ -6,13 +6,14 @@
     should be able to use this when the user is adding 
     schools/educations, job experiences, contacts-references, accolades.
 
-    NOTE: Should really make it so we have an itemList, so that 
-    developers don't have to make the sidebar on the outside. Like 
-    it feels a lot simpler sense we only need to render an array of 
-    data. But obviously for something like itemForm or addItemBtn,
-    it's definitely going to be made on the outside since it'll need
-    to be very customizable.
-
+- sectionTitle: Title of section
+- isOpen: Whether this section is active or not basically, so whether the user 
+	has this section 'open'
+- toggleIsOpen: A function to toggle whether that section is open or not
+- itemForm: item form associated with the section
+- itemSidebar: sidebar that displays items 
+- showFormBtnText: Text for the show form btn
+- showForm: Function for showing a form, which sets the form as active
 */
 import CustomButton from "./CustomButton";
 import PropTypes from "prop-types";

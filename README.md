@@ -1,19 +1,19 @@
 # CV-Application
+
+- Description: A react application that lets you create a simple 
+    CV/Resume.
+
 -   Designs for inspiration:
     1. https://sharkri.github.io/cv-application/
     2. https://rmathr.github.io/cv-project/
 
+- How to deploy vite react app to github pages
+    1. "npm install gh-pages --save-dev"; download github pages
+    2. In package.json do "predeploy: npm run build" and "deploy: gh-pages -d dist". Put these before "build: vite build".
+    3. In "vite.config.js" put "base: '/YOUR_REPONAME'" before "plugins: [react()]".
+    4. Finally do "npm run deploy" to create github pages branch. Then you can go to github website to set this as the source branch.
 
-- Issues:
-
-5. Improve the styling and account for responsive design
-
-7. Try to do those smooth drop downs. It'll probably involve us
-    having to mess with the height using a class.
-
-
-6. Try to do the download resume functionality
-
-8. Make sure the closing and opening of forms doesn't affect the 
-    resume's size
-9. Try to do customization section
+- Potential improvements:
+    1. Make code cleaner maybe with the relating to form fields and forms in App.jsx and EditPanel.jsx.
+    2. Add animations somehow to the drop downs
+    
