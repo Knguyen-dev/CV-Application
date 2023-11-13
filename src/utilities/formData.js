@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 function deepFreeze(object) {
 	// Retrieve the property names defined on object
 	const propNames = Reflect.ownKeys(object);
@@ -33,6 +35,7 @@ const exampleResumeData = {
 	},
 	schoolList: [
 		{
+			id: uuidv4(),
 			"school-name": "Parmesiano University",
 			"degree-type": "Gastronomy",
 			"start-date": "08/2014",
@@ -41,6 +44,7 @@ const exampleResumeData = {
 			isVisible: true,
 		},
 		{
+			id: uuidv4(),
 			"school-name": "Hogwarts Technical College",
 			"degree-type": "Culinary",
 			"start-date": "02/2010",
@@ -51,6 +55,7 @@ const exampleResumeData = {
 	],
 	jobList: [
 		{
+			id: uuidv4(),
 			"company-name": "Amazon & Sarah.",
 			"position-title": "Data Engineer/Master",
 			"start-date": "01/2006",
@@ -61,6 +66,7 @@ const exampleResumeData = {
 				"Overseer of handling and ensuring that data relating to and regarding sales was analyzed properly. And it was always handled properly",
 		},
 		{
+			id: uuidv4(),
 			"company-name": "Monopoly Inc.",
 			"position-title": "Data Analyst",
 			"start-date": "02/2010",
@@ -71,6 +77,7 @@ const exampleResumeData = {
 				"Crunched numbers and analyzed data for the company",
 		},
 		{
+			id: uuidv4(),
 			"company-name": "Color Corp.",
 			"position-title": "Cybersecurity Data Expert",
 			"start-date": "06/2014",
@@ -84,89 +91,6 @@ const exampleResumeData = {
 };
 
 deepFreeze(exampleResumeData);
-
-const personalFormFields = [
-	{
-		name: "full-name",
-		type: "text",
-		label: "Full name",
-		inputID: "input-full-name",
-		placeholder: "Enter full name",
-		value: "",
-	},
-	{
-		name: "email",
-		type: "email",
-		label: "Email",
-		inputID: "input-email",
-		placeholder: "Enter email address",
-		value: "",
-	},
-	{
-		name: "phone-number",
-		type: "text",
-		label: "Phone number",
-		inputID: "input-phone-number",
-		placeholder: "Enter phone number",
-		value: "",
-	},
-	{
-		name: "address",
-		type: "text",
-		label: "Address",
-		inputID: "input-address",
-		placeholder: "Enter address",
-		value: "",
-	},
-];
-
-const schoolFormFields = [
-	{
-		name: "school-name",
-		type: "text",
-		label: "School",
-		inputID: "input-school-name",
-		placeholder: "Enter school / university",
-		value: "",
-		isRequired: true,
-	},
-	{
-		name: "degree-type",
-		type: "text",
-		label: "Degree",
-		inputID: "input-degree-type",
-		placeholder: "Enter Degree / Field Of Study",
-		value: "",
-		isRequired: true,
-	},
-	{
-		name: "start-date",
-		type: "text",
-		label: "Start Date",
-		inputID: "input-start-date",
-		placeholder: "Enter start date in format (mm/yyyy)",
-		value: "",
-		isRequired: true,
-	},
-	{
-		name: "end-date",
-		type: "text",
-		label: "End Date",
-		inputID: "input-end-date",
-		placeholder: "Enter end date in format (mm/yyyy)",
-		value: "",
-		isRequired: true,
-	},
-	{
-		name: "address",
-		type: "text",
-		label: "Address",
-		inputID: "input-school-address",
-		placeholder: "Enter address of respective school",
-		value: "",
-		isRequired: true,
-	},
-];
 
 const jobFormFields = [
 	{
@@ -225,9 +149,4 @@ const jobFormFields = [
 	},
 ];
 
-export {
-	exampleResumeData,
-	personalFormFields,
-	schoolFormFields,
-	jobFormFields,
-};
+export { exampleResumeData, jobFormFields };

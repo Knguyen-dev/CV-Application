@@ -1,58 +1,69 @@
 "use strict";
 import "../styles/App.css";
 
-import {
-	exampleResumeData,
-	personalFormFields,
-	schoolFormFields,
-	jobFormFields,
-} from "../utilities/formData";
+import { exampleResumeData } from "../utilities/formData";
 import deepCopyArray from "../utilities/deepCopy";
 
 import EditPanel from "./EditPanel";
 import Resume from "./Resume";
-import Header from "./Header";
-import Footer from "./Footer";
 import { useState } from "react";
+
+function Header() {
+	return (
+		<header id="app-header">
+			<h1 className="app-title-el">CV Maker</h1>
+		</header>
+	);
+}
+
+function Footer() {
+	const currentYear = new Date().getFullYear();
+	return (
+		<footer id="app-footer">
+			<p>Knguyen {currentYear}</p>
+			<ul className="footer-nav">
+				<li>
+					<a
+						target="_blank"
+						rel="noreferrer"
+						href="https://github.com/Knguyen-dev/CV-Application.git"
+					>
+						<img
+							src="src/assets/github-mark.svg"
+							alt="github icon"
+							className="link-icon"
+						/>
+					</a>
+				</li>
+			</ul>
+		</footer>
+	);
+}
 
 function App() {
 	/*
 	- Set up Personal form:
-		1. initialPersonFormData: Object, which is a copy of the state
-			but the values are empty strings. Good for reseting form fields.
-		2. personalFormData: State that tracks input of form
-		3. personalFields: Form fields that will be rendered that 
-			also reflect the input values of the state
+		1. personalFormData: State that tracks input of form
 	*/
-	let initialPersonalFormData = {};
-	personalFormFields.forEach((field) => {
-		initialPersonalFormData[field.name] = "";
-	});
-	const [personalFormData, setPersonalFormData] = useState(
-		initialPersonalFormData
-	);
-	const personalFields = personalFormFields.map((field) => {
-		field.value = personalFormData[field.name];
-		return field;
+
+	const [personalFormData, setPersonalFormData] = useState({
+		"full-name": "",
+		email: "",
+		"phone-number": "",
+		address: "",
 	});
 
 	/*
 	- Set up school form and array state to store those items:
-	1. initialSchoolFormData: Object, which is a copy of the state
-		but the values are empty strings. Good for reseting form fields.
-	2. schoolFormData: State that tracks input of form
-	3. schoolFields: Form fields that will be rendered that 
-		also reflect the input values of the state
-	4. schoolList: List to store school objects that the user saved into the application
+	1. schoolFormData: State that tracks input of form
+	2. schoolList: List to store school objects that the user saved into the application
 	*/
-	let initialSchoolFormData = {};
-	schoolFormFields.forEach((field) => {
-		initialSchoolFormData[field.name] = "";
-	});
-	const [schoolFormData, setSchoolFormData] = useState(initialSchoolFormData);
-	const schoolFields = schoolFormFields.map((field) => {
-		field.value = schoolFormData[field.name];
-		return field;
+	const [schoolFormData, setSchoolFormData] = useState({
+		"school-name": "",
+		"degree-type": "",
+		"start-date": "",
+		"end-date": "",
+		address: "",
 	});
 	const [schoolList, setSchoolList] = useState([]);
 
@@ -65,14 +76,13 @@ function App() {
 	4. jobList: List to store job objects that the user saved into the application using 
 		the job form.
 	*/
-	let initialJobFormData = {};
-	jobFormFields.forEach((field) => {
-		initialJobFormData[field.name] = "";
-	});
-	const [jobFormData, setJobFormData] = useState(initialJobFormData);
-	const jobFields = jobFormFields.map((field) => {
-		field.value = jobFormData[field.name];
-		return field;
+	const [jobFormData, setJobFormData] = useState({
+		"company-name": "",
+		"position-title": "",
+		"start-date": "",
+		"end-date": "",
+		address: "",
+		"job-description": "",
 	});
 	const [jobList, setJobList] = useState([]);
 
@@ -98,17 +108,14 @@ function App() {
 		*/
 		personalForm: {
 			setFormData: setPersonalFormData,
-			initialFormData: initialPersonalFormData,
 		},
 		schoolForm: {
 			setFormData: setSchoolFormData,
-			initialFormData: initialSchoolFormData,
 			setItemList: setSchoolList,
 			itemList: schoolList,
 		},
 		jobForm: {
 			setFormData: setJobFormData,
-			initialFormData: initialJobFormData,
 			setItemList: setJobList,
 			itemList: jobList,
 		},
@@ -157,8 +164,13 @@ function App() {
 
 	const clearFormData = (formKey) => {
 		const setFormData = formSetters[formKey].setFormData;
-		const initialFormData = formSetters[formKey].initialFormData;
-		setFormData(initialFormData);
+		setFormData((formData) => {
+			const blankFormData = {};
+			for (const key in formData) {
+				blankFormData[key] = "";
+			}
+			return blankFormData;
+		});
 	};
 
 	const deleteResumeItem = (formKey) => {
@@ -232,9 +244,7 @@ function App() {
 					clearFormData={clearFormData}
 					formSetters={formSetters}
 					onInputChange={onInputChange}
-					personalFields={personalFields}
-					schoolFields={schoolFields}
-					jobFields={jobFields}
+					personalData={personalFormData}
 					submitForm={submitForm}
 					setEditIndex={setEditIndex}
 					isEdit={isEdit}

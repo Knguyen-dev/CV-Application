@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 	inputID from formFields.
 */
 
+import InputGroup from "./InputGroup";
 function FormFields({ onChange, formFields }) {
 	return (
 		<div className="form-fields">

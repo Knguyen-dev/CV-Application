@@ -1,8 +1,7 @@
 import "../styles/EditPanel.css";
-import ItemFormSection from "./ItemFormSection";
-import { PersonalInfoForm, ItemForm } from "./Forms";
+import AddPersonal from "./PersonalForm";
+import AddEducation from "./Education/AddEducation";
 import CustomButton from "./CustomButton";
-import { SidebarItem } from "./Sidebar";
 import { EditFont } from "./EditFont";
 
 import saveAsImage from "../utilities/saveAsImage";
@@ -96,9 +95,7 @@ function EditPanel({
 	clearFormData,
 	formSetters,
 	onInputChange,
-	personalFields,
-	schoolFields,
-	jobFields,
+	personalData,
 	submitForm,
 	setEditIndex,
 	isEdit,
@@ -113,7 +110,7 @@ function EditPanel({
 	3. fontClass: State that tracks the css class that should be added onto the resume div, which in turn will change the font of the resume
 	*/
 	const [tabType, setTabType] = useState("content");
-	const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+	const [activeSection, setActiveSection] = useState("");
 	const [fontClass, setFontClass] = useState("arial-font");
 
 	/*
@@ -124,29 +121,6 @@ function EditPanel({
 	*/
 	const schoolList = formSetters["schoolForm"].itemList;
 	const jobList = formSetters["jobForm"].itemList;
-
-	/*
-	+ toggleActionSection: Function for choosing which of the 
-		collapsible ItemFormSections is active or opened. There
-		are two cases that can happen:
-
-	1. activeSectionIndex === index: This means the user is clicking
-		the open/close button on a section that's already open. In this
-		case we want to close the section, so we set our index to -1, which 
-		will mean on next render, no sections will be open
-
-	2. Else, the index of the section we're trying to open is different 
-		from the one that's currently opened, so we set the new index. Then
-		on next render the new 'activeSectionIndex' will be the only one that's 
-		opened while all others are closed.
-	*/
-	const toggleActiveSection = (index) => {
-		if (activeSectionIndex === index) {
-			setActiveSectionIndex(-1);
-		} else {
-			setActiveSectionIndex(index);
-		}
-	};
 
 	/*
 	- Function for canceling or closing out of a form. This closes 
@@ -176,151 +150,36 @@ function EditPanel({
 		setItemList([...itemList]);
 	};
 
-	// Mark up for each item form section, all belong in "content tab"
-	const sectionArr = [
-		/*
-		- How to create a section for an item form
-		1. Create a title for the section
-		2. Create itemSidebar, which is the sidebar showing the items created using said form
-			Here we'll render the markup for all of the associated SidebarItems.
-			- Set their visibility
-			- Set the functionality for editing an item on click
-			- Set functionality for toggling its visibility
-		*/
-		{
-			sectionTitle: "Education",
-			itemSidebar: (
-				<ul className="sidebar-list">
-					{schoolList.map((schoolObj, index) => {
-						return (
-							<SidebarItem
-								key={index}
-								itemName={schoolObj["school-name"]}
-								isVisible={schoolObj["isVisible"]}
-								onItemClick={() => {
-									setActiveForm("schoolForm");
-									setEditIndex(index);
-									formSetters["schoolForm"].setFormData(
-										schoolList[index]
-									);
-									setIsEdit(true);
-								}}
-								toggleVisibility={() => {
-									toggleItemVisibility(
-										schoolObj,
-										schoolList,
-										formSetters["schoolForm"].setItemList
-									);
-								}}
-							/>
-						);
-					})}
-				</ul>
-			),
-			/*
-			3. Create the form itself. 
-				- We give a function for changing the input, which will affect a state in real time
-				- Give function for deleting an associated item on the resume.
-				- Set functionality for closing and submitting the form
-				- Give object for creating the form fields and give a boolean to see
-					when a user is editing the form.
-				- Finally, add a function for showing the form or setting it as the active form so 
-					we know what form the user is adding or deleting from.
-			*/
-			itemForm: (
-				<ItemForm
-					formID="school-form"
-					onInputChange={(e) => onInputChange(e, "schoolForm")}
-					deleteItem={() => deleteResumeItem("schoolForm")}
-					closeForm={() => closeForm("schoolForm")}
-					formFields={schoolFields}
-					submitForm={(e) => submitForm(e, "schoolForm")}
-					isEdit={isEdit}
-				/>
-			),
-			isActiveForm: activeForm === "schoolForm",
-			showFormBtnText: "Add School",
-			showForm: () => setActiveForm("schoolForm"),
-		},
-		{
-			sectionTitle: "Experiences",
-			itemSidebar: (
-				<ul className="sidebar-list">
-					{jobList.map((jobObj, index) => {
-						return (
-							<SidebarItem
-								key={index}
-								itemName={jobObj["company-name"]}
-								isVisible={jobObj["isVisible"]}
-								onItemClick={() => {
-									setActiveForm("jobForm");
-									setEditIndex(index);
-									formSetters["jobForm"].setFormData(
-										jobList[index]
-									);
-									setIsEdit(true);
-								}}
-								toggleVisibility={() => {
-									toggleItemVisibility(
-										jobObj,
-										jobList,
-										formSetters["jobForm"].setItemList
-									);
-								}}
-							/>
-						);
-					})}
-				</ul>
-			),
-			itemForm: (
-				<ItemForm
-					formID="job-form"
-					onInputChange={(e) => onInputChange(e, "jobForm")}
-					deleteItem={() => deleteResumeItem("jobForm")}
-					closeForm={() => closeForm("jobForm")}
-					formFields={jobFields}
-					submitForm={(e) => submitForm(e, "jobForm")}
-					isEdit={isEdit}
-				/>
-			),
-			isActiveForm: activeForm === "jobForm",
-			showFormBtnText: "Add Job",
-			showForm: () => setActiveForm("jobForm"),
-		},
-	];
+	const editItem = (formKey, index, itemList) => {
+		setActiveForm(formKey);
+		setEditIndex(index);
+		formSetters[formKey].setFormData(itemList[index]);
+		setIsEdit(true);
+	};
 
 	// Based on the state, render components for 'form-section'
 	const tabContent = {
 		content: (
 			<>
-				<div className="edit-section">
-					<header className="edit-section-header">
-						<h2>Personal Details</h2>
-					</header>
-					<section className="edit-section-body">
-						<PersonalInfoForm
-							onInputChange={(e) =>
-								onInputChange(e, "personalForm")
-							}
-							formFields={personalFields}
-						/>
-					</section>
-				</div>
-				{sectionArr.map((sectionObj, index) => {
-					return (
-						<ItemFormSection
-							key={index}
-							sectionTitle={sectionObj.sectionTitle}
-							isOpen={activeSectionIndex === index}
-							toggleIsOpen={() => toggleActiveSection(index)}
-							isActiveForm={sectionObj.isActiveForm}
-							itemForm={sectionObj.itemForm}
-							itemSidebar={sectionObj.itemSidebar}
-							showFormBtnText={sectionObj.showFormBtnText}
-							showForm={sectionObj.showForm}
-						/>
-					);
-				})}
+				<AddPersonal
+					onInputChange={onInputChange}
+					personalData={personalData}
+				/>
+				<AddEducation
+					schoolList={schoolList}
+					onItemClick={editItem}
+					toggleVisibility
+					isOpen
+					toggleIsOpen
+					isActiveForm
+					showForm
+					onInputChange
+					formData
+					isEdit
+					deleteItem
+					closeForm
+					saveItem
+				/>
 			</>
 		),
 		customize: (

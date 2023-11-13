@@ -40,4 +40,23 @@ SidebarItem.propTypes = {
 	toggleVisibility: PropTypes.func,
 };
 
-export { SidebarItem };
+function Sidebar({ itemsArr }) {
+	return (
+		<ul className="sidebar-list">
+			{itemsArr.map((item) => (
+				<SidebarItem
+					key={item.id} // Using index as a key (better to use a unique ID if available)
+					itemName={item.itemName}
+					isVisible={item.isVisible}
+					onItemClick={item.onItemClick}
+					toggleVisibility={item.toggleVisibility}
+				/>
+			))}
+		</ul>
+	);
+}
+Sidebar.propTypes = {
+	itemsArr: PropTypes.array,
+};
+
+export { Sidebar, SidebarItem };
