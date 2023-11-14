@@ -4,9 +4,10 @@ import "../styles/App.css";
 import { exampleResumeData } from "../utilities/formData";
 import deepCopyArray from "../utilities/deepCopy";
 
-import EditPanel from "./EditPanel";
-import Resume from "./Resume";
-import { useState } from "react";
+import EditPanel from "./EditPanel/EditPanel";
+import Resume from "./Resume/Resume";
+import { useState, useRef, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function Header() {
 	return (
@@ -45,7 +46,6 @@ function App() {
 	- Set up Personal form:
 		1. personalFormData: State that tracks input of form
 	*/
-
 	const [personalFormData, setPersonalFormData] = useState({
 		"full-name": "",
 		email: "",
@@ -100,6 +100,17 @@ function App() {
 	const [editIndex, setEditIndex] = useState(0);
 	const [isEdit, setIsEdit] = useState(false);
 	const [activeForm, setActiveForm] = useState("");
+
+	const [fontClass, setFontClass] = useState("arial-font");
+	const resumeRef = useRef(null);
+
+	useEffect(() => {
+		const resumeNode = resumeRef.current;
+		resumeNode.classList.add(fontClass);
+		return () => {
+			resumeNode.classList.remove(fontClass);
+		};
+	}, [fontClass]);
 
 	const formSetters = {
 		/*
@@ -188,7 +199,7 @@ function App() {
 		itemSetter(newItemArr);
 	};
 
-	const submitForm = (e, formKey) => {
+	const saveItem = (e, formKey) => {
 		/*
 		- Submission can be either editing/saving changes to an existing 
 			item or adding a new item
@@ -223,15 +234,55 @@ function App() {
 
 		if (isEdit) {
 			newItemObj.isVisible = newItemList[editIndex].isVisible;
+			newItemObj.id = newItemList[editIndex].id;
 			newItemList[editIndex] = newItemObj;
-			setItemList(newItemList);
 			setIsEdit(false);
 		} else {
 			newItemObj.isVisible = true;
+			newItemObj.id = uuidv4();
 			newItemList.push(newItemObj);
-			setItemList(newItemList);
 		}
+		setItemList(newItemList);
 		clearFormData(formKey);
+	};
+
+	/*
+	- Function for canceling or closing out of a form. This closes 
+		the form and eliminates the input that was in the form 
+	1. formKey: Key used for identifying a form. Again these 
+		are defined in formSetters because each key will make us
+		use different functions for different forms.
+	*/
+	const closeForm = (formKey) => {
+		clearFormData(formKey);
+		setActiveForm("");
+		setIsEdit(false);
+	};
+
+	/*
+	- Toggles an item's visibility.
+	1. itemObj is actually an element in itemList, and 
+		javascript handles objects as references. Objects 
+		and arrays are non-primitive, meaning when passed to 
+		functions they are references, whilst strings and numbers 
+		are passed via value. Just a good thing to remember.
+	NOTE: For visibility to work properly, you have to remember
+		to set the state to a new array.
+	*/
+	const toggleItemVisibility = (formKey, itemObj, itemList) => {
+		itemObj.isVisible = !itemObj.isVisible;
+		const setItemList = formSetters[formKey].setItemList;
+		setItemList([...itemList]);
+	};
+
+	/*
+	+ Prepares individual resume item to be edited.
+	*/
+	const editItem = (formKey, index, itemList) => {
+		setActiveForm(formKey);
+		setEditIndex(index);
+		formSetters[formKey].setFormData(itemList[index]);
+		setIsEdit(true);
 	};
 
 	return (
@@ -241,17 +292,24 @@ function App() {
 				<EditPanel
 					loadExampleResume={loadExampleResume}
 					clearResumeData={clearResumeData}
+					closeForm={closeForm}
+					toggleItemVisibility={toggleItemVisibility}
+					editItem={editItem}
 					clearFormData={clearFormData}
 					formSetters={formSetters}
 					onInputChange={onInputChange}
 					personalData={personalFormData}
-					submitForm={submitForm}
+					schoolData={schoolFormData}
+					jobData={jobFormData}
+					saveItem={saveItem}
 					setEditIndex={setEditIndex}
 					isEdit={isEdit}
 					setIsEdit={setIsEdit}
 					deleteResumeItem={deleteResumeItem}
 					activeForm={activeForm}
 					setActiveForm={setActiveForm}
+					setFontClass={setFontClass}
+					fontClass={fontClass}
 				/>
 				<Resume
 					personalFormData={personalFormData}
@@ -262,6 +320,7 @@ function App() {
 					isEdit={isEdit}
 					editIndex={editIndex}
 					activeForm={activeForm}
+					ref={resumeRef}
 				/>
 			</main>
 			<Footer />

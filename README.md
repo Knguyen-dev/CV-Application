@@ -14,6 +14,7 @@
     4. Finally do "npm run deploy" to create github pages branch. Then you can go to github website to set this as the source branch.
 
 - Potential improvements:
-    1. Make code cleaner maybe with the relating to form fields and forms in App.jsx and EditPanel.jsx.
-    2. Add animations somehow to the drop downs
     
+    1. set font buttons are overriding the sample-resume-class. We want 
+        it so that it only adds and removes a font class, and not other classes.
+

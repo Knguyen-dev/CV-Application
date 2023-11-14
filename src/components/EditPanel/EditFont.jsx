@@ -1,4 +1,4 @@
-import "../styles/EditFont.css";
+import "../../styles/EditFont.css";
 import PropTypes from "prop-types";
 /*
 - EditFont: This component is responsible for 
@@ -62,4 +62,4 @@ EditFont.propTypes = {
 	setFontClass: PropTypes.func,
 };
 
-export { EditFont };
+export default EditFont;

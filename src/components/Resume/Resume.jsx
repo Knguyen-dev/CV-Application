@@ -1,33 +1,26 @@
 import PropTypes from "prop-types";
-import { ResumeSection } from "./ResumeSection";
-import "../styles/Resume.css";
+import { forwardRef } from "react";
 
-function Resume({
-	personalFormData,
-	schoolFormData,
-	jobFormData,
-	schoolList,
-	jobList,
-	isEdit,
-	editIndex,
-	activeForm,
-}) {
+import { ResumeSection } from "./ResumeSection";
+import "../../styles/Resume.css";
+
+const Resume = forwardRef(function Resume(props, ref) {
 	// Personal Form Fields
-	const fullName = personalFormData["full-name"].trim();
-	const email = personalFormData["email"].trim();
-	const phoneNumber = personalFormData["phone-number"].trim();
-	const address = personalFormData["address"].trim();
+	const fullName = props.personalFormData["full-name"].trim();
+	const email = props.personalFormData["email"].trim();
+	const phoneNumber = props.personalFormData["phone-number"].trim();
+	const address = props.personalFormData["address"].trim();
 
 	// Create an object of form data and form items and copies of the array so that
 	// we don't accidentally mess with the original state arrays.
 	const formInfo = {
 		schoolForm: {
-			formData: schoolFormData,
-			itemList: [...schoolList],
+			formData: props.schoolFormData,
+			itemList: [...props.schoolList],
 		},
 		jobForm: {
-			formData: jobFormData,
-			itemList: [...jobList],
+			formData: props.jobFormData,
+			itemList: [...props.jobList],
 		},
 	};
 
@@ -64,8 +57,8 @@ function Resume({
 		- .trim(): Using .trim() so that the application doesn't render any new elements 
 		on the resume when the user just puts in spaces.
 	*/
-	if (activeForm) {
-		const formData = formInfo[activeForm].formData;
+	if (props.activeForm) {
+		const formData = formInfo[props.activeForm].formData;
 
 		let formItemObj = {};
 		for (const key in formData) {
@@ -78,13 +71,13 @@ function Resume({
 			(value) => value === ""
 		);
 
-		if (isEdit) {
+		if (props.isEdit) {
 			formItemObj.isVisible =
-				formInfo[activeForm].itemList[editIndex].isVisible;
-			formInfo[activeForm].itemList[editIndex] = formItemObj;
+				formInfo[props.activeForm].itemList[props.editIndex].isVisible;
+			formInfo[props.activeForm].itemList[props.editIndex] = formItemObj;
 		} else if (!isEmptyForm) {
 			formItemObj.isVisible = true;
-			formInfo[activeForm].itemList.push(formItemObj);
+			formInfo[props.activeForm].itemList.push(formItemObj);
 		}
 	}
 
@@ -96,7 +89,7 @@ function Resume({
 	}
 
 	return (
-		<div id="resume" className="">
+		<div id="resume" className="sample-resume-class" ref={ref}>
 			<header className="personal-details">
 				{fullName ? (
 					<h1 className="resume-name" id="full-name-el">
@@ -128,7 +121,9 @@ function Resume({
 							<span className="material-symbols-outlined">
 								location_on
 							</span>
-							<p id="address-el">{personalFormData["address"]}</p>
+							<p id="address-el">
+								{props.personalFormData["address"]}
+							</p>
 						</div>
 					) : null}
 				</div>
@@ -151,7 +146,7 @@ function Resume({
 			</main>
 		</div>
 	);
-}
+});
 
 Resume.propTypes = {
 	personalFormData: PropTypes.object,

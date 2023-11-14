@@ -1,8 +1,8 @@
-import InputGroup from "../InputGroup";
-import FormButtons from "../FormButtons";
+import InputGroup from "./InputGroup";
+import FormButtons from "./FormButtons";
 import PropTypes from "prop-types";
 
-function EducationForm({
+function ExperienceForm({
 	onInputChange,
 	formData,
 	isEdit,
@@ -10,15 +10,9 @@ function EducationForm({
 	closeForm,
 	saveItem,
 }) {
-	const schoolName = formData["school-name"];
-	const degreeType = formData["degree-type"];
-	const startDate = formData["start-date"];
-	const endDate = formData["end-date"];
-	const address = formData["address"];
-
 	return (
 		<form
-			id="personal-info-form"
+			id="education-info-form"
 			onSubmit={(e) => {
 				e.preventDefault();
 				saveItem(e);
@@ -26,55 +20,66 @@ function EducationForm({
 			}}
 		>
 			<InputGroup
-				id="input-school-name"
-				placeholder="Enter school / university"
+				id="input-company-name"
+				placeholder="Enter company / organization"
 				type="text"
-				labelText="School"
+				labelText="Company"
 				onChange={onInputChange}
-				value={schoolName}
+				value={formData["company-name"]}
 				required={true}
-				name="school-name"
+				name="company-name"
 			/>
 			<InputGroup
-				id="input-degree-type"
-				placeholder="Enter Degree /Field Of Study"
+				id="input-position-title"
+				placeholder="Enter position title"
 				type="text"
-				labelText="Degree"
+				labelText="Position"
 				onChange={onInputChange}
-				value={degreeType}
+				value={formData["position-title"]}
 				required={true}
-				name="degree-type"
+				name="position-title"
 			/>
 			<InputGroup
-				id="input-start-date-education"
+				id="input-start-date-experience"
 				placeholder="Enter start date in format (mm/yyyy)"
 				type="text"
 				labelText="Start Date"
 				onChange={onInputChange}
-				value={startDate}
+				value={formData["start-date"]}
 				required={true}
 				name="start-date"
 			/>
 			<InputGroup
-				id="input-end-date-education"
+				id="input-end-date-experience"
 				placeholder="Enter end date in format (mm/yyyy)"
 				type="text"
 				labelText="End Date"
 				onChange={onInputChange}
-				value={endDate}
+				value={formData["end-date"]}
 				required={true}
 				name="end-date"
 			/>
 			<InputGroup
-				id="input-address"
+				id="input-address-experience"
 				placeholder="Enter address"
 				type="text"
 				labelText="Address"
 				onChange={onInputChange}
-				value={address}
+				value={formData["address"]}
 				recommended={true}
 				name="address"
 			/>
+			<InputGroup
+				id="input-job-description"
+				placeholder="Enter job description"
+				type="textarea"
+				labelText="Description"
+				onChange={onInputChange}
+				value={formData["job-description"]}
+				recommended={true}
+				name="job-description"
+			/>
+
 			<FormButtons
 				isEdit={isEdit}
 				deleteItem={deleteItem}
@@ -83,15 +88,15 @@ function EducationForm({
 		</form>
 	);
 }
-
-EducationForm.propTypes = {
+ExperienceForm.propTypes = {
 	onInputChange: PropTypes.func,
 	formData: PropTypes.shape({
-		"school-name": PropTypes.string,
-		"degree-type": PropTypes.string,
+		"company-name": PropTypes.string,
+		"position-title": PropTypes.string,
 		"start-date": PropTypes.string,
 		"end-date": PropTypes.string,
 		address: PropTypes.string,
+		"job-description": PropTypes.string,
 	}).isRequired,
 	isEdit: PropTypes.bool,
 	deleteItem: PropTypes.func,
@@ -99,4 +104,4 @@ EducationForm.propTypes = {
 	saveItem: PropTypes.func,
 };
 
-export default EducationForm;
+export default ExperienceForm;

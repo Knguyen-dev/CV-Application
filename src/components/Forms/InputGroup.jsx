@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
-import "../styles/InputGroup.css";
+import PropTypes from "prop-types";
+import "../../styles/InputGroup.css";
 function InputGroup({
 	id,
 	placeholder,
@@ -46,5 +46,18 @@ function InputGroup({
 		</div>
 	);
 }
+
+InputGroup.propTypes = {
+	id: PropTypes.string,
+	placeholder: PropTypes.string,
+	type: PropTypes.string,
+	labelText: PropTypes.string,
+	onChange: PropTypes.func,
+	value: PropTypes.string,
+	name: PropTypes.string,
+	required: PropTypes.bool,
+	optional: PropTypes.bool,
+	recommended: PropTypes.bool,
+};
 
 export default InputGroup;

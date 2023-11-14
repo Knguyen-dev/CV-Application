@@ -68,7 +68,7 @@ function AddPersonal({ onInputChange, personalData }) {
 			</header>
 			<section className="edit-section-body">
 				<PersonalForm
-					onInputChange={(e) => onInputChange(e, "personalForm")}
+					onInputChange={onInputChange}
 					formData={personalData}
 				/>
 			</section>
