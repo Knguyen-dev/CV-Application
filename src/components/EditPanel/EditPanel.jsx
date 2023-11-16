@@ -12,8 +12,10 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 
 /*
-- Component responsible for creating and handling the forms and 
-	all of their functionalities.
+- Component responsible for showing and controlling the features 
+	that allow the user to interact with the resume. Mainly things 
+	such as rendering forms correctly, and correctly showing resume 
+	items that the user has created on a sidebar.
 */
 function EditPanel({
 	loadExampleResume,

@@ -13,9 +13,6 @@ import PropTypes from "prop-types";
 	want to remember it's state.
 */
 function EditFont({ fontClass, setFontClass }) {
-	const resume = document.querySelector("#resume");
-	resume.className = fontClass;
-
 	const fontBtns = [
 		{
 			btnText: "Arial",

@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import CustomButton from "../CustomButton";
 
-// For critical resume interactions that involve the entire resume
+/*
+- Component that displays the various actions the user can do with their 
+	resume, besides inputting in information. 
+*/
 function ResumeActions({ loadExampleResume, downloadResume, clearResume }) {
 	return (
 		<div className="resume-actions edit-section">

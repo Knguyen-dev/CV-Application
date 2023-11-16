@@ -1,18 +1,34 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
-
 import { ResumeSection } from "./ResumeSection";
 import "../../styles/Resume.css";
 
+/*
++ Resume component will render the resume DOM node and handle 
+	the rendering logic for showing resume items and other user info.
+
+- Using isEdit, we know whether or not they're editing an existing object, and what item 
+	they're editing. 
+- .trim(): Using .trim() so that the application doesn't render any new elements 
+	on the resume when the user just puts in spaces.
+
+- formInfo: We use this object to more flexibly know which 
+	of the item forms the user is accessing. An item form is a 
+	form that lets the user add an item to the resume. So with 
+	this formInfo object we can more easily handle rendering logic 
+	regardless of the item form, and regardless of whether they're 
+	editing or not.
+
+	NOTE: itemList in formInfo should be a copy of the state so 
+		we don't accidentally mess with the original state arrays.
+*/
 const Resume = forwardRef(function Resume(props, ref) {
-	// Personal Form Fields
+	// Personal Form field values
 	const fullName = props.personalFormData["full-name"].trim();
 	const email = props.personalFormData["email"].trim();
 	const phoneNumber = props.personalFormData["phone-number"].trim();
 	const address = props.personalFormData["address"].trim();
 
-	// Create an object of form data and form items and copies of the array so that
-	// we don't accidentally mess with the original state arrays.
 	const formInfo = {
 		schoolForm: {
 			formData: props.schoolFormData,
@@ -26,15 +42,29 @@ const Resume = forwardRef(function Resume(props, ref) {
 
 	/*
 	- If a form is active:
-	1. Get the respective form data state value, and
-		list of existing resume items created by that form
-	
-	2. Load formItemObj with the current values of the active form it's tracking
-
-	3. Check if the active has empty input or not
-
+	1. Get the respective form data state value, and list of existing resume items created by that form.
+	2. Load formItemObj with the current values of the active form it's tracking.
+	3. Check if the active has empty input or not.
 	4. Check if the user is currently editing an existing item on the 
-		active form, else they're trying to add a new item to the resume
+		active form, else they're trying to add a new item to the resume.
+
+
+	- If isEdit (the user is currently editing):
+	1. Set the isVisible attribute of the formItemObj to the isVisible attribute 
+		of the item they're editing. As a result if the item being edited is 
+		visible, user will be able to see the edits on the resume. Else, the 
+		user won't be able to see their edits since the item was originally invisible,
+		however the applicatin is still keeping track of the changes the user is 
+		making.
+	2. Put that formItemObj in the index position of where the user was editing 
+		their original item, so now when being shown on the resume, the edits are taking 
+		place where the edited item used to be.
+
+	- Else if the form isn't empty:
+	1. Make sure our formItemObj, which is used to represent and render 
+		an unsaved form item that the user wants to add, is visible and 
+		push it to the array so that the resume can display the info of the 
+		unsaved item.
 
 	NOTE: 
 		- The main point of this is formItemObj, which will be 
@@ -49,13 +79,6 @@ const Resume = forwardRef(function Resume(props, ref) {
 		a new school. If activeForm doesn't equal anything, we 
 		don't have to worry about rendering their edits with 
 		formItemObj because they currently don't havea form open.
-
-
-		- Using isEdit, we know whether or not 
-		they're editing an existing object, and what item 
-		they're editing. 
-		- .trim(): Using .trim() so that the application doesn't render any new elements 
-		on the resume when the user just puts in spaces.
 	*/
 	if (props.activeForm) {
 		const formData = formInfo[props.activeForm].formData;
@@ -89,7 +112,7 @@ const Resume = forwardRef(function Resume(props, ref) {
 	}
 
 	return (
-		<div id="resume" className="sample-resume-class" ref={ref}>
+		<div id="resume" ref={ref}>
 			<header className="personal-details">
 				{fullName ? (
 					<h1 className="resume-name" id="full-name-el">
@@ -138,7 +161,7 @@ const Resume = forwardRef(function Resume(props, ref) {
 				) : null}
 				{formInfo["jobForm"].itemList.length != 0 ? (
 					<ResumeSection
-						sectionTitle="Education"
+						sectionTitle="Experience"
 						itemType="job"
 						itemDataList={formInfo["jobForm"].itemList}
 					/>
