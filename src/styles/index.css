@@ -51,7 +51,10 @@ video {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
-	--transition: all 0.25s ease-in-out;
+
+	--speed: 250ms;
+
+	--transition: all var(--speed) ease-in-out;
 	--letter-spacing: 4px;
 	--border-radius: 6px;
 }

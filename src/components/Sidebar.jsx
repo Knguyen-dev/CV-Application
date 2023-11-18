@@ -5,7 +5,7 @@ import CustomButton from "./CustomButton";
 - itemName: title or name of the item that's going to show up on the sidebar
 - isVisible: Boolean indicating the visibility of the item, which affects 
 	which icon shows up on the visibility button
-- onItemClick: Main functionality of clicking the item. In this case, this 
+- editItem: Main functionality of clicking the item. In this case, this 
 	would allow the user to edit the item in the application.
 - toggleVisibility: Function that lets the user hide an item on the cv.
 - How to toggle visibility: 
@@ -16,12 +16,12 @@ import CustomButton from "./CustomButton";
 		your new item obj
 	4. Then set the new list for the state
 */
-function SidebarItem({ itemName, isVisible, onItemClick, toggleVisibility }) {
+function SidebarItem({ itemName, isVisible, editItem, toggleVisibility }) {
 	return (
 		<div className="sidebar-list-item">
 			<span className="sidebar-item-title">{itemName}</span>
 			<div className="btn-container">
-				<button className="edit-item-btn" onClick={onItemClick}>
+				<button className="edit-item-btn" onClick={editItem}>
 					Edit
 				</button>
 				<CustomButton
@@ -36,8 +36,29 @@ function SidebarItem({ itemName, isVisible, onItemClick, toggleVisibility }) {
 SidebarItem.propTypes = {
 	itemName: PropTypes.string,
 	isVisible: PropTypes.bool,
-	onItemClick: PropTypes.func,
+	editItem: PropTypes.func,
 	toggleVisibility: PropTypes.func,
 };
 
-export { SidebarItem };
+function Sidebar({ itemList }) {
+	return (
+		<ul className="sidebar-list">
+			{itemList.map((item) => {
+				return (
+					<SidebarItem
+						key={item.id}
+						itemName={item.itemName}
+						isVisible={item.isVisible}
+						editItem={item.editItem}
+						toggleVisibility={item.toggleVisibility}
+					/>
+				);
+			})}
+		</ul>
+	);
+}
+Sidebar.propTypes = {
+	itemList: PropTypes.array,
+};
+
+export default Sidebar;

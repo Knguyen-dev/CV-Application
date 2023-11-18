@@ -1,4 +1,4 @@
-import "../styles/EditFont.css";
+import "../../styles/EditFont.css";
 import PropTypes from "prop-types";
 /*
 - EditFont: This component is responsible for 
@@ -13,9 +13,6 @@ import PropTypes from "prop-types";
 	want to remember it's state.
 */
 function EditFont({ fontClass, setFontClass }) {
-	const resume = document.querySelector("#resume");
-	resume.className = fontClass;
-
 	const fontBtns = [
 		{
 			btnText: "Arial",
@@ -62,4 +59,4 @@ EditFont.propTypes = {
 	setFontClass: PropTypes.func,
 };
 
-export { EditFont };
+export default EditFont;
