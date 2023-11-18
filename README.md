@@ -14,7 +14,4 @@
     4. Finally do "npm run deploy" to create github pages branch. Then you can go to github website to set this as the source branch.
 
 - Potential improvements:
-    
-    1. set font buttons are overriding the sample-resume-class. We want 
-        it so that it only adds and removes a font class, and not other classes.
-
+1. Still trouble with image paths in vite
