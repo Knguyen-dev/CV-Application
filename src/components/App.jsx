@@ -29,11 +29,7 @@ function Footer() {
 						rel="noreferrer"
 						href="https://github.com/Knguyen-dev/CV-Application.git"
 					>
-						<img
-							src="src/assets/github-mark.svg"
-							alt="github icon"
-							className="link-icon"
-						/>
+						Github Repo
 					</a>
 				</li>
 			</ul>
