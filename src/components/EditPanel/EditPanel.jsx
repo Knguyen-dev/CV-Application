@@ -6,7 +6,7 @@ import ExperienceForm from "../Forms/ExperienceForm";
 import EditFont from "./EditFont";
 import ResumeActions from "./ResumeActions";
 import EditSideBar from "./EditSidebar";
-import saveAsImage from "../../utilities/saveAsImage";
+import { generatePdf } from "../../utilities/generatePdf";
 
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -165,7 +165,7 @@ function EditPanel({
 						loadExampleResume();
 						setFontClass("arial-font");
 					}}
-					downloadResume={saveAsImage}
+					downloadResume={generatePdf}
 					clearResume={clearResumeData}
 				/>
 				{tabContent[tabType]}
