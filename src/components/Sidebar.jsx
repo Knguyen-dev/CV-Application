@@ -1,4 +1,3 @@
-import "../styles/Sidebar.css";
 import PropTypes from "prop-types";
 import CustomButton from "./CustomButton";
 /*

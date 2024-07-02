@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { ResumeSection } from "./ResumeSection";
-import "../../styles/Resume.css";
 
 /*
 + Resume component will render the resume DOM node and handle 

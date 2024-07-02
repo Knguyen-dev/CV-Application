@@ -60,6 +60,7 @@ video {
 }
 
 body {
+	font-family: var(--font-family-1);
 	min-width: 320px;
 	min-height: 100vh;
 }
@@ -100,5 +101,499 @@ button {
 	font-family: var(--font-family-2);
 }
 .roboto-font {
-	font-family: var(---font-family-3);
+	font-family: var(--font-family-3);
+}
+
+/* 
++ Layout stylings for the App
+*/
+#app-container {
+	display: grid;
+	min-height: 100vh;
+	grid-template-rows: auto 1fr auto;
+}
+
+#app-header,
+#app-footer {
+	background-color: var(--save-btn-clr);
+	padding: 8px;
+	text-align: center;
+}
+#app-main {
+	background-color: var(--main-bg-clr);
+	display: flex;
+	padding: 16px 24px;
+	column-gap: 12px;
+	justify-content: space-between;
+}
+
+.footer-nav {
+	margin-top: 8px;
+}
+
+/* 
++ CSS for the 'add items' sections, such as adding schools, or job experience.
+- Credits for css-grid transition trick: https://www.youtube.com/watch?v=B_n4YONte5A 
+*/
+.item-section-body {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows var(--speed);
+}
+
+.flow-div {
+	overflow: hidden;
+}
+
+.item-section-body.open {
+	grid-template-rows: 1fr;
+}
+
+/* 
++ For the EditFont section stylings
+*/
+.font-section .edit-section-body {
+	display: flex;
+
+	justify-content: flex-start;
+	column-gap: 2em;
+}
+
+.font-btn {
+	border: 2px solid black;
+	color: black;
+	padding: 1em 1em;
+	font-weight: 700;
+}
+.font-btn-active {
+	background-color: black;
+	color: white;
+}
+
+.font-section .font-icon {
+	font-size: 1.8em;
+}
+
+.font-section .font-text {
+	font-size: 1.2em;
+}
+
+/* 
++ Stylings for the EditPanel
+*/
+.edit-section {
+	padding: 12px 16px;
+	background-color: var(--edit-section-clr);
+	box-shadow: var(--box-shadow);
+	border-radius: var(--border-radius);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.edit-section button {
+	border-radius: var(--border-radius);
+	display: flex;
+	align-items: center;
+}
+
+.edit-section header {
+	display: flex;
+	justify-content: space-between;
+	column-gap: 8px;
+}
+
+.edit-panel {
+	flex: 0 1 40%;
+	height: min-content;
+	display: flex;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.edit-sidebar {
+	gap: 8px;
+}
+.sidebar-btn {
+	flex-direction: column;
+	font-size: 16px;
+	font-weight: 700;
+	padding: 12px;
+}
+
+.sidebar-btn.active-btn {
+	background-color: var(--clr-light-blue);
+	color: white;
+}
+
+.edit-section header {
+	display: flex;
+	align-items: center;
+}
+.edit-section-body {
+	margin-top: 8px;
+}
+
+.drop-down-btn {
+	font-size: 16px;
+	border: 2px solid var(--clr-emerald);
+	color: var(--clr-emerald);
+	font-weight: 700;
+	padding: 12px;
+}
+.drop-down-btn:hover {
+	background-color: var(--clr-emerald);
+	color: white;
+}
+
+.edit-section h2 {
+	margin-bottom: 4px;
+}
+
+.form-section {
+	width: 65%;
+	display: flex;
+	flex-direction: column;
+	gap: 1em;
+}
+
+.resume-actions {
+	width: fit-content;
+}
+
+.action-btns-container {
+	display: flex;
+	flex-direction: column;
+	row-gap: 12px;
+}
+
+.action-btns-container button {
+	padding: 8px 12px;
+	font-weight: 700;
+	gap: 24px;
+	font-size: 16px;
+}
+
+.open-form-btn-container {
+	display: flex;
+	justify-content: center;
+}
+.open-form-btn {
+	border-radius: var(--border-radius);
+	padding: 12px 16px;
+}
+
+/* Media queries 
+
+.edit-panel: Allows the sidebar to stack on top of form content, and 
+	also we make the spacing more uniform
+
+.edit-sidebar,
+.form-section,
+.resume-actions: Gives these sections 100% of the width of the flex-box
+	which allows for the content to nicely fit inside of it. 
+
+.resume-actions header,
+.resume-actions button: For centering text.
+
+*/
+
+@media screen and (max-width: 1000px) {
+	.edit-panel {
+		flex-direction: column;
+		row-gap: 1em;
+	}
+
+	.edit-sidebar,
+	.form-section,
+	.resume-actions {
+		width: 100%;
+	}
+
+	.resume-actions header,
+	.resume-actions button {
+		justify-content: center;
+	}
+}
+
+/* 
++ Styling for the form buttons in the education and job sections.
+*/
+.form-btn-container {
+	margin-top: 1em;
+	display: flex;
+	justify-content: space-between;
+	column-gap: 1.5em;
+}
+.form-btn-container button {
+	font-size: 16px;
+	font-weight: 700;
+	padding: 12px 16px;
+}
+.form-btn-container div {
+	display: flex;
+	column-gap: 12px;
+}
+
+.delete-btn {
+	border: 2px solid var(--delete-btn-clr);
+	color: var(--delete-btn-clr);
+}
+.delete-btn:hover {
+	background-color: var(--delete-btn-clr);
+	color: white;
+}
+
+.cancel-btn {
+	border: 2px solid var(--cancel-btn-clr);
+}
+.cancel-btn:hover {
+	background-color: var(--cancel-btn-clr);
+	color: white;
+}
+
+.save-btn {
+	border: 2px solid var(--save-btn-clr);
+}
+.save-btn:hover {
+	background-color: var(--save-btn-clr);
+	color: white;
+}
+
+.btn-hidden {
+	opacity: 0;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+@media screen and (max-width: 600px) {
+	/*
+	- Makes the buttons on the form more responsive for smaller screens.
+	*/
+	.form-btn-container,
+	.form-btn-container div {
+		flex-direction: column-reverse;
+		row-gap: 0.5em;
+	}
+	.form-btn-container button {
+		justify-content: center;
+	}
+
+	/* 
+	- Before when our delete button had btn-hidden we 
+	made it invisible since we wanted the blank space for layout purposes. However once we're 
+	at 600px or lower, we make it so btn-hidden just removes 
+	the delete button from the layout. As a result our layout 
+	just looks better since it doesn't have extra blank space.
+	
+	*/
+	.form-btn-container .btn-hidden {
+		display: none;
+	}
+}
+
+/* 
++ Stylings that specifically for the input fields
+*/
+.input-group input,
+.input-group textarea {
+	border: 2px solid transparent;
+	background-color: var(--main-btn-clr);
+	padding: 10px;
+	border-radius: 12px;
+	transition: var(--transition);
+}
+
+.input-group textarea {
+	max-width: 100%;
+	min-height: 42px;
+	height: 65px;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+	border-color: var(--focus-input-clr);
+	outline: none;
+	box-shadow: 0px 3px 15px rgba(59, 131, 246, 0.2);
+}
+
+.input-group {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin-bottom: 12px;
+	flex-grow: 1;
+}
+
+.education-dates {
+	display: flex;
+	gap: 8px;
+}
+
+label > * {
+	font-family: "NotoSans-SemiBold";
+}
+
+.optional-text,
+.recommended-text,
+.required-text {
+	margin-left: 8px;
+	color: rgb(156, 163, 175);
+	font-size: 10.5px;
+}
+
+/* 
++ Stylings for the resume element, which is the element that allows users to see changes to their resume in real time.
+*/
+#resume {
+	flex: 1 1 60%;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	box-shadow: var(--box-shadow);
+
+	/*
+	- Now resume can't shrink below 400px which is good since 
+		anything lower than that makes the resume just look bad.
+	*/
+	min-width: 400px;
+}
+
+/* Styling resume header */
+.personal-details {
+	padding: 2em 1em;
+	background-color: var(--clr-dark-indigo);
+	color: white;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	row-gap: 1.25em;
+}
+.resume-name {
+	font-size: 2em;
+}
+
+.resume-contact-info {
+	display: flex;
+	justify-content: center;
+	gap: 18px;
+	flex-wrap: wrap;
+}
+
+.contact-section {
+	display: flex;
+	align-items: center;
+	column-gap: 0.5em;
+}
+
+/* Styling resume body */
+.resume-body {
+	display: flex;
+	flex-direction: column;
+	padding: 1em 0;
+	background-color: var(--edit-section-clr);
+	padding-top: 2em;
+	row-gap: 2em;
+}
+
+.resume-section {
+	width: 85%;
+	margin: 0 auto;
+}
+
+/* Styling resume-section  */
+.resume-section-header {
+	text-align: center;
+	font-weight: 700;
+	font-size: 22px;
+	background-color: var(--resume-section-header-clr);
+	color: var(--clr-dark-indigo);
+	padding: 4px 0;
+}
+#resume .institution-name {
+	font-weight: 700;
+}
+
+.resume-info-list {
+	display: flex;
+	flex-direction: column;
+	row-gap: 12px;
+	margin-top: 12px;
+}
+
+/* Styling the education section */
+
+.resume-info-item {
+	display: flex;
+	gap: 16px;
+}
+
+.resume-info-group {
+	display: flex;
+	flex-direction: column;
+	row-gap: 4px;
+}
+
+.resume-info-group-minor {
+	flex: 0 0 25%;
+	min-width: 25%;
+}
+
+.resume-info-group-major {
+	flex: 1;
+}
+
+/* 
++ Stylings for the sidebar lists that show the various schools or job experiences that a user has had.
+*/
+.sidebar-list {
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+	margin: 8px 0;
+}
+.sidebar-list-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border: 2px solid var(--clr-light-teal);
+	border-radius: var(--border-radius);
+	padding: 12px 16px;
+	transition: var(--transition);
+}
+
+.sidebar-list .visibility-icon {
+	transition: var(--transition);
+}
+
+.sidebar-list-item .sidebar-item-title {
+	flex: 0 0 50%;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.sidebar-list-item .btn-container {
+	display: flex;
+	align-items: center;
+	column-gap: 16px;
+}
+
+.edit-item-btn {
+	border: 2px solid var(--clr-light-teal);
+	color: black;
+	padding: 8px 16px;
+	font-weight: 700;
+}
+.edit-item-btn:hover {
+	background: var(--clr-light-teal);
+	color: white;
+}
+
+.sidebar-list-item .toggle-visibility-btn {
+	background: transparent;
+	border-radius: 0;
+	border-bottom: 2px solid transparent;
+	transition: var(--transition);
+}
+.sidebar-list-item .toggle-visibility-btn:hover {
+	border-color: black;
 }

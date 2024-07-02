@@ -1,4 +1,3 @@
-import "../../styles/EditFont.css";
 import PropTypes from "prop-types";
 /*
 - EditFont: This component is responsible for 

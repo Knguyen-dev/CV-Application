@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import "../../styles/InputGroup.css";
 function InputGroup({
 	id,
 	placeholder,

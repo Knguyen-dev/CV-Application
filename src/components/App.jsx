@@ -1,9 +1,6 @@
 "use strict";
-import "../styles/App.css";
-
 import { exampleResumeData } from "../utilities/formData";
 import deepCopyArray from "../utilities/deepCopy";
-
 import EditPanel from "./EditPanel/EditPanel";
 import Resume from "./Resume/Resume";
 import { useState, useRef, useEffect } from "react";
@@ -83,8 +80,8 @@ function App() {
 	const [jobList, setJobList] = useState([]);
 
 	/*
-	1. editIndex: Boolean to indicate which school object is being edited in schoolList
-	2. isEdit: Boolean that indicates whether the user is editing an existing school object or 
+	1. editIndex: Boolean to indicate which school object, or experience object is being edited in schoolList
+	2. isEdit: Boolean that indicates whether the user is editing an existing school object (or experience object) or 
 		adding a new one.
 	3. activeForm: State to track which of the item forms the user currently has open.
 		State's values should be one of the form keys belonging to the 
@@ -100,6 +97,7 @@ function App() {
 	const [fontClass, setFontClass] = useState("arial-font");
 	const resumeRef = useRef(null);
 
+	// Effect for updating the css class, which determines the resume's font.
 	useEffect(() => {
 		const resumeNode = resumeRef.current;
 		resumeNode.classList.add(fontClass);
@@ -107,6 +105,11 @@ function App() {
 			resumeNode.classList.remove(fontClass);
 		};
 	}, [fontClass]);
+
+	// On application load, we put in example resume data
+	useEffect(() => {
+		loadExampleResume();
+	}, []);
 
 	const formSetters = {
 		/*

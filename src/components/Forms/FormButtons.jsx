@@ -1,4 +1,3 @@
-import "../../styles/FormButtons.css";
 import PropTypes from "prop-types";
 
 function FormButtons({ isEdit, deleteItem, closeForm }) {

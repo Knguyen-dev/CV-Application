@@ -1,9 +1,6 @@
 import PropTypes from "prop-types";
 import Sidebar from "../Sidebar";
-
 import CustomButton from "../CustomButton";
-
-import "../../styles/AddItem.css";
 
 function AddItem({
 	sectionTitle,

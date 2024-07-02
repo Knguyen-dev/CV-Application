@@ -1,4 +1,3 @@
-import "../../styles/EditPanel.css";
 import AddItem from "../Forms/AddItem";
 import AddPersonal from "../Forms/PersonalForm";
 import EducationForm from "../Forms/EducationForm";
@@ -7,7 +6,6 @@ import EditFont from "./EditFont";
 import ResumeActions from "./ResumeActions";
 import EditSideBar from "./EditSidebar";
 import { generatePdf } from "../../utilities/generatePdf";
-
 import PropTypes from "prop-types";
 import { useState } from "react";
 
