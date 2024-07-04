@@ -1,17 +1,20 @@
 # CV-Application
 
-- Description: A react application that lets you create a simple 
-    CV/Resume.
+## Description
+A simple React application that lets users create a simple resume, and let those users see their changes in real time. After the user is done with making their resume, the application allows the user to to save their resume as a PDF file.
 
--   Designs for inspiration:
-    1. https://sharkri.github.io/cv-application/
-    2. https://rmathr.github.io/cv-project/
 
+
+
+# Credits:
+1. [CV Application from SharkRi, main design inspiration](https://sharkri.github.io/cv-application/)
+
+
+
+
+## Misc
 - How to deploy vite react app to github pages
-    1. "npm install gh-pages --save-dev"; download github pages
-    2. In package.json do "predeploy: npm run build" and "deploy: gh-pages -d dist". Put these before "build: vite build".
-    3. In "vite.config.js" put "base: '/YOUR_REPONAME'" before "plugins: [react()]".
-    4. Finally do "npm run deploy" to create github pages branch. Then you can go to github website to set this as the source branch.
-
-- Potential improvements:
-1. Still trouble with image paths in vite
+1. "npm install gh-pages --save-dev"; download github pages
+2. In package.json do "predeploy: npm run build" and "deploy: gh-pages -d dist". Put these before "build: vite build".
+3. In "vite.config.js" put "base: '/YOUR_REPONAME'" before "plugins: [react()]".
+4. Finally do "npm run deploy" to create github pages branch. Then you can go to github website to set this as the source branch.

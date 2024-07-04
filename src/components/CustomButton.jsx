@@ -2,12 +2,10 @@
 // an icon in them.
 import PropTypes from "prop-types";
 
-function CustomButton({ btnText, onClick, classList, iconKeyword }) {
+function CustomButton({ btnText, onClick, classList, icon }) {
 	return (
 		<button className={classList.join(" ")} onClick={onClick}>
-			{iconKeyword ? (
-				<span className="material-symbols-outlined">{iconKeyword}</span>
-			) : null}
+			{icon}
 			<span className="button-text">{btnText}</span>
 		</button>
 	);
@@ -16,7 +14,7 @@ CustomButton.propTypes = {
 	btnText: PropTypes.string,
 	onClick: PropTypes.func,
 	classList: PropTypes.array,
-	iconKeyword: PropTypes.string,
+	icon: PropTypes.element,
 };
 
 export default CustomButton;

@@ -5,6 +5,7 @@ import EditPanel from "./EditPanel/EditPanel";
 import Resume from "./Resume/Resume";
 import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { FaGithub } from "react-icons/fa";
 
 function Header() {
 	return (
@@ -26,7 +27,7 @@ function Footer() {
 						rel="noreferrer"
 						href="https://github.com/Knguyen-dev/CV-Application.git"
 					>
-						Github Repo
+						<FaGithub fontSize={24} />
 					</a>
 				</li>
 			</ul>

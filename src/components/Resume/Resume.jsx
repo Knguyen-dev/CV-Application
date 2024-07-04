@@ -2,6 +2,10 @@ import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import { ResumeSection } from "./ResumeSection";
 
+import { MdAlternateEmail } from "react-icons/md";
+import { FaPhoneAlt } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+
 /*
 + Resume component will render the resume DOM node and handle 
 	the rendering logic for showing resume items and other user info.
@@ -122,27 +126,21 @@ const Resume = forwardRef(function Resume(props, ref) {
 				<div className="resume-contact-info">
 					{email ? (
 						<div className="contact-section">
-							<span className="material-symbols-outlined">
-								mail
-							</span>
+							<MdAlternateEmail />
 							<p id="email-el">{email}</p>
 						</div>
 					) : null}
 
 					{phoneNumber ? (
 						<div className="contact-section">
-							<span className="material-symbols-outlined">
-								call
-							</span>
+							<FaPhoneAlt />
 							<p id="phone-number-el">{phoneNumber}</p>
 						</div>
 					) : null}
 
 					{address ? (
 						<div className="contact-section">
-							<span className="material-symbols-outlined">
-								location_on
-							</span>
+							<FaLocationDot />
 							<p id="address-el">
 								{props.personalFormData["address"]}
 							</p>

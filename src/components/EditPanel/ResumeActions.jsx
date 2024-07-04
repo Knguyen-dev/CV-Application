@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 import CustomButton from "../CustomButton";
 
+import { FaTrash } from "react-icons/fa";
+import { FaCloudDownloadAlt } from "react-icons/fa";
+import { MdDownload } from "react-icons/md";
+
 /*
 - Component that displays the various actions the user can do with their 
 	resume, besides inputting in information. 
@@ -24,13 +28,14 @@ function ResumeActions({ loadExampleResume, downloadResume, clearResume }) {
 						classList={["download-resume-btn", "button-shrink"]}
 						iconKeyword="download"
 						onClick={downloadResume}
+						icon={<MdDownload fontSize={20} />}
 					/>
 
 					<CustomButton
 						btnText="Clear Resume"
 						classList={["clear-resume-btn", "button-shrink"]}
 						onClick={clearResume}
-						iconKeyword="delete"
+						icon={<FaTrash />}
 					/>
 				</div>
 			</section>
