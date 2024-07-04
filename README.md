@@ -3,6 +3,8 @@
 ## Description
 A simple React application that lets users create a simple resume, and let those users see their changes in real time. After the user is done with making their resume, the application allows the user to to save their resume as a PDF file.
 
+[Site Preview](https://knguyen-dev.github.io/CV-Application/)
+
 
 
 
